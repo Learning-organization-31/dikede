@@ -38,18 +38,12 @@
       >
         <el-table-column prop="pageIndex" label="序号" width="80">
         </el-table-column>
-        <el-table-column prop="taskCode" label="工单编号" width="230">
-        </el-table-column>
-        <el-table-column prop="innerCode" label="设备编号" width="210">
-        </el-table-column>
-        <el-table-column prop="typeName" label="工单类型" width="210">
-        </el-table-column>
-        <el-table-column prop="createType" label="工单方式" width="215">
-        </el-table-column>
-        <el-table-column prop="taskStatus" label="工单状态" width="210">
-        </el-table-column>
-        <el-table-column prop="userName" label="运营人员" width="210">
-        </el-table-column>
+        <el-table-column prop="taskCode" label="工单编号"> </el-table-column>
+        <el-table-column prop="innerCode" label="设备编号"> </el-table-column>
+        <el-table-column prop="typeName" label="工单类型"> </el-table-column>
+        <el-table-column prop="createType" label="工单方式"> </el-table-column>
+        <el-table-column prop="taskStatus" label="工单状态"> </el-table-column>
+        <el-table-column prop="userName" label="运营人员"> </el-table-column>
         <el-table-column prop="createTime" label="创建日期" width="190">
         </el-table-column>
         <el-table-column prop="taskId" label="操作" width="100">
