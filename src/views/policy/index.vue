@@ -1,20 +1,28 @@
 <template>
-  <div>111</div>
+  <div>
+    <SearchBar @search="searchFn" lastInpTitle="工单编号" />
+  </div>
 </template>
 
 <script>
+import SearchBar from '@/components/SerchBar'
 export default {
-  name: "",
+  name: 'policy',
   data() {
-    return {};
+    return {}
+  },
+  components: {
+    SearchBar,
   },
 
   created() {},
 
-  methods: {},
+  methods: {
+    searchFn() {},
+  },
 
   computed: {},
-};
+}
 </script>
 
 <style scoped></style>
