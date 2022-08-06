@@ -140,7 +140,8 @@ export default {
     async openFn() {
       try {
         if (!this.allTaskType[0]) {
-          this.allTaskType = await taskType();
+          const res = await taskType();
+          this.allTaskType = res.filter((item) => item.typeName === "补货工单");
         }
       } catch (error) {
         console.log(error);
