@@ -5,6 +5,7 @@ import app from "./modules/app";
 import settings from "./modules/settings";
 import user from "./modules/user";
 import task from "./modules/task";
+import vm from "./modules/vm";
 import createVuexPersisted from "vuex-persistedstate";
 
 Vue.use(Vuex);
@@ -15,6 +16,7 @@ const store = new Vuex.Store({
     settings,
     user,
     task,
+    vm,
   },
   getters,
   plugins: [
