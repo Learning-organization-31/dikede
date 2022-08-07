@@ -67,19 +67,19 @@ export const constantRoutes = [
     children: [
       {
         path: "region",
-        component: () => import("@/views/node/components/region"), // Parent router-view
+        component: () => import("@/views/region"), // Parent router-view
         name: "Region",
         meta: { title: "区域管理" },
       },
       {
         path: "node",
-        component: () => import("@/views/node/components/node"),
+        component: () => import("@/views/node"),
         name: "SonNode",
         meta: { title: "点位管理" },
       },
       {
         path: "partner",
-        component: () => import("@/views/node/components/partner"),
+        component: () => import("@/views/partner"),
         name: "Partner",
         meta: { title: "合作商管理" },
       },
