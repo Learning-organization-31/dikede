@@ -1,45 +1,79 @@
 <template>
-  <el-table
-    :data="List.currentPageRecords"
-    :height="
-      List.currentPageRecords && List.currentPageRecords[0] ? '528' : '120'
-    "
-    stripe
-    style="width: 100%"
-    empty-text="暂无数据"
-  >
-    <el-table-column label="序号" width="80px">
-      <template slot-scope="scope">
-        <span>{{ scope.$index + 1 + (List.pageIndex - 1) * 10 }}</span>
-      </template>
-    </el-table-column>
-    <el-table-column prop="name" label="点位名称"> </el-table-column>
-    <el-table-column prop="region.name" label="所在名称"> </el-table-column>
-    <el-table-column prop="businessType.name" label="商圈类型">
-    </el-table-column>
-    <el-table-column prop="ownerName" label="合作商"> </el-table-column>
-    <el-table-column prop="addr" :formatter="formatter" label="详细地址">
-    </el-table-column>
-    <el-table-column prop="taskId" label="操作" width="200px">
-      <template slot-scope="">
-        <span class="col-text col-get"> 查看详情 </span>
-        <span class="col-text col-set"> 修改 </span>
-        <span class="col-text col-remove"> 删除 </span>
-      </template>
-    </el-table-column>
-  </el-table>
+  <div>
+    <el-table
+      :data="List.currentPageRecords"
+      :height="
+        List.currentPageRecords && List.currentPageRecords[0] ? '528' : '120'
+      "
+      stripe
+      style="width: 100%"
+      empty-text="暂无数据"
+    >
+      <el-table-column label="序号" width="80px">
+        <template slot-scope="scope">
+          <span>{{ scope.$index + 1 + (List.pageIndex - 1) * 10 }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="name" label="点位名称"> </el-table-column>
+      <el-table-column prop="region.name" label="所在名称"> </el-table-column>
+      <el-table-column prop="businessType.name" label="商圈类型">
+      </el-table-column>
+      <el-table-column prop="ownerName" label="合作商"> </el-table-column>
+      <el-table-column prop="addr" :formatter="formatter" label="详细地址">
+      </el-table-column>
+      <el-table-column prop="taskId" label="操作" width="200px">
+        <template slot-scope="scope">
+          <span class="col-text col-get" @click="getInfo(scope.row)">
+            查看详情
+          </span>
+          <span class="col-text col-set" @click="setInfo(scope.row)">
+            修改
+          </span>
+          <span class="col-text col-remove" @click="removeNode(scope.row)">
+            删除
+          </span>
+        </template>
+      </el-table-column>
+    </el-table>
+    <InfoDialog :infoIsShow.sync="infoIsShow" :rowInfo="rowInfo" />
+  </div>
 </template>
 
 <script>
+import InfoDialog from "./InfoDialog";
+import { removeNodeFn } from "@/api/node";
 export default {
   name: "RegionList",
   data() {
-    return {};
+    return {
+      infoIsShow: false,
+      rowInfo: {},
+    };
   },
 
   created() {},
 
   methods: {
+    //修改详情
+    setInfo(row) {
+      this.$emit("setInfo", row);
+    },
+    //删除点位
+    async removeNode(row) {
+      try {
+        console.log(row.id);
+        await removeNodeFn(row.id);
+        this.$message.success("删除成功");
+      } catch (error) {
+        this.$message.error(error.response?.data || "服务器错误");
+      }
+    },
+    //查看详情
+    getInfo(row) {
+      this.infoIsShow = true;
+      this.rowInfo = row;
+    },
+
     //格式化地址
     formatter(row, column, cellValue) {
       return cellValue.split("-")[3];
@@ -53,6 +87,10 @@ export default {
       type: Object,
       required: true,
     },
+  },
+
+  components: {
+    InfoDialog,
   },
 };
 </script>

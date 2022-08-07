@@ -20,6 +20,7 @@
       @nextPage="nextPage"
       :lastDisabled="lastDisabled"
       :rightDisabled="rightDisabled"
+      v-if="regionList.currentPageRecords && regionList.currentPageRecords[0]"
     />
   </div>
 </template>
