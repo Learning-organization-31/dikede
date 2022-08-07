@@ -98,19 +98,19 @@ export const constantRoutes = [
     children: [
       {
         path: "index",
-        component: () => import("@/views/vm/components/index"), // Parent router-view
+        component: () => import("@/views/vm/index"), // Parent router-view
         name: "Index",
         meta: { title: "设备管理" },
       },
       {
         path: "status",
-        component: () => import("@/views/vm/components/status"),
+        component: () => import("@/views/vm/status"),
         name: "Status",
         meta: { title: "设备状态" },
       },
       {
         path: "type",
-        component: () => import("@/views/vm/components/type"),
+        component: () => import("@/views/vm/type"),
         name: "Type",
         meta: { title: "设备类型管理" },
       },

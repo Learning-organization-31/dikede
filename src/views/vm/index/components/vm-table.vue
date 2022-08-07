@@ -7,23 +7,18 @@
     @selection-change="handleSelectionChange"
   >
     <el-table-column type="selection" width="55" />
-    <el-table-column type="index" label="序号" width="80" />
-    <el-table-column prop="innerCode" label="设备编号" width="180" />
-    <el-table-column prop="type.name" label="设备型号" width="180" />
+    <el-table-column type="index" label="序号" />
+    <el-table-column prop="innerCode" label="设备编号" />
+    <el-table-column prop="type.name" label="设备型号" />
     <el-table-column
       prop="node.addr"
+      :formatter="vmAddr"
       show-overflow-tooltip
       label="详细地址"
-      width="180"
     />
-    <el-table-column prop="ownerName" label="合作商" width="180" />
-    <el-table-column
-      prop="vmStatus"
-      :formatter="vmStatus"
-      label="设备状态"
-      width="130"
-    />
-    <el-table-column label="操作" width="180">
+    <el-table-column prop="ownerName" label="合作商" />
+    <el-table-column prop="vmStatus" :formatter="vmStatus" label="设备状态" />
+    <el-table-column label="操作">
       <span class="tb-span">货道</span>
       <span class="tb-span">策略</span>
       <span class="tb-span">修改</span>
@@ -44,6 +39,10 @@ export default {
       if (value === 0) return "未投放";
       if (value === 1) return "运营";
       if (value === 3) return "撤机";
+    },
+    // 详细地址
+    vmAddr(a, b, value) {
+      return value.split("-")[3];
     },
   },
   computed: {

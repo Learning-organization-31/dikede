@@ -72,11 +72,13 @@ export default {
 
     // 点击上一页
     lastPage() {
+      if (this.loading) return; // 防抖
       this.getMyVmList({ pageIndex: this.vmList.pageIndex - 1 });
     },
 
     // 点击下一页
     nextPage() {
+      if (this.loading) return; // 防抖
       this.getMyVmList({ pageIndex: this.vmList.pageIndex - 0 + 1 });
     },
   },
