@@ -149,7 +149,6 @@ export default {
       this.loading = true;
       const data = await getvmTypeDeilApi(typeId);
       this.addVmServeForm = data;
-      console.log(data);
       this.loading = false;
     },
 
