@@ -163,4 +163,10 @@ export default {
   opacity: 0.8;
   cursor: pointer;
 }
+::v-deep .has-gutter {
+  .cell {
+    color: rgb(102, 102, 102);
+    font-weight: 400;
+  }
+}
 </style>

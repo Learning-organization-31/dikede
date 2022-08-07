@@ -5,6 +5,7 @@ import app from "./modules/app";
 import settings from "./modules/settings";
 import user from "./modules/user";
 import task from "./modules/task";
+import region from "./modules/region";
 import createVuexPersisted from "vuex-persistedstate";
 import operation from "./modules/operation";
 
@@ -17,6 +18,7 @@ const store = new Vuex.Store({
     user,
     task,
     operation,
+    region,
   },
   getters,
   plugins: [
