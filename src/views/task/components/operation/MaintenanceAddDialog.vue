@@ -3,10 +3,9 @@
     <Dialog
       :businessIsShow="isShow"
       title="新增工单"
-      @close="addDialogUnShow"
-      @cancelBtn="addDialogUnShow"
-      @open="openFn"
-      @sureBtn="createService"
+      @close="closeFn"
+      @cancelBtn="closeFn"
+      @sureBtn="addWord"
       :isDestroy="true"
     >
       <div class="content">
@@ -75,34 +74,33 @@
 
 <script>
 import Dialog from "@/components/Dialog";
+import { mapActions, mapMutations, mapState } from "vuex";
+import { taskType, createService } from "@/api/task";
 export default {
   name: "addDialog",
   data() {
     return {
+      //表单数据
       service: {
         assignorId: "", //运营人员id
         createType: 1, //工单类型
         desc: "", //描述信息
-        details: [], //补货信息(补货工单才有)
         innerCode: "", //设备编号
         productType: "", //工单类型
         userId: 1,
       },
       //工单类型列表
       allTaskType: [],
-      //运营人员列表
-      operatorList: [],
-      //补货信息列表
-      ChannelList: [],
+
       rules: {
         innerCode: [
           { required: true, message: "设备编号不能为空", trigger: "blur" },
         ],
         productType: [
-          { required: true, message: "工单类型不能为空", trigger: "blur" },
+          { required: true, message: "工单类型不能为空", trigger: "change" },
         ],
-        userId: [
-          { required: true, message: "运营人员不能为空", trigger: "blur" },
+        assignorId: [
+          { required: true, message: "运营人员不能为空", trigger: "change" },
         ],
         desc: [{ required: true, message: "备注不能为空", trigger: "blur" }],
       },
@@ -111,11 +109,59 @@ export default {
     };
   },
 
-  created() {},
+  created() {
+    this.getAllTaskStatus();
+  },
 
-  methods: {},
+  methods: {
+    //添加新工单
+    async addWord() {
+      try {
+        await this.$refs.ruleForm.validate();
+        await createService(this.service);
+        this.SET_TASK_SEARCH_PAGE_SIZE();
+        this.getMaintenance();
+        this.$message.success("发布成功");
+        this.closeFn();
+      } catch (error) {
+        if (error.response.status === 500) {
+          this.$message.error(error.response.data);
+        }
+      }
+    },
+    //获取所有工单类型
+    async getAllTaskStatus() {
+      const res = await taskType();
+      this.allTaskType = res.filter((item) => item.typeName !== "补货工单");
+    },
+    //监听input框获取最新的运营人员的数据,添加防抖
+    replenishment() {
+      clearTimeout(this.timer);
+      this.timer = setTimeout(() => {
+        if (this.service.innerCode.trim()) {
+          this.getOperatorList(this.service.innerCode);
+        }
+      }, 500);
+    },
+    //关闭弹层,清空from表单数据
+    closeFn() {
+      this.$emit("update:isShow", false);
+      this.service = {
+        assignorId: "", //运营人员id
+        createType: 1, //工单类型
+        desc: "", //描述信息
+        innerCode: "", //设备编号
+        productType: "", //工单类型
+        userId: 1,
+      };
+    },
+    ...mapActions("operation", ["getOperatorList", "getMaintenance"]),
+    ...mapMutations("operation", ["SET_TASK_SEARCH_PAGE_SIZE"]),
+  },
 
-  computed: {},
+  computed: {
+    ...mapState("operation", ["taskSearch", "operatorList"]),
+  },
 
   components: {
     Dialog,

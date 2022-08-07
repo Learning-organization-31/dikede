@@ -6,7 +6,7 @@
       @search="searchFn"
       :typeList="typeList"
     />
-    <div class="result">
+    <div class="result" v-loading="loading">
       <div class="btn-title">
         <MyButton
           icon="el-icon-circle-plus-outline"
@@ -14,7 +14,7 @@
           @click="isShow = true"
           >新建
         </MyButton>
-        <MaintenanceAddDialog :isShow="isShow" />
+        <MaintenanceAddDialog :isShow.sync="isShow" ref="add" />
         <el-table
           :data="mainList"
           :height="mainList[0] ? '528' : '120'"
@@ -36,7 +36,7 @@
           </el-table-column>
           <el-table-column prop="taskId" label="操作">
             <template slot-scope="scope">
-              <span class="col-text" @click="getTaskInfo(scope.row)"
+              <span class="col-text" @click="getTaskInfoFn(scope.row)"
                 >查看详情
               </span>
             </template>
@@ -44,7 +44,7 @@
         </el-table>
       </div>
     </div>
-
+    <OpeInfoDialog :infoDialogIsShow.sync="infoIsShow" @infoAdd="infoAdd" />
     <FooterPage
       :taskList="MaintenanceList"
       :lastDisabled="lastDisabled"
@@ -61,6 +61,7 @@ import SearchBar from "@/components/SerchBar";
 import MyButton from "@/components/MyButton";
 import FooterPage from "@/components/FooterPage";
 import MaintenanceAddDialog from "./MaintenanceAddDialog";
+import OpeInfoDialog from "./OpeInfoDialog";
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 export default {
   name: "Operation",
@@ -70,6 +71,7 @@ export default {
         background: "linear-gradient(135deg,#ff9743,#ff5e20)",
       },
       isShow: false,
+      infoIsShow: false,
     };
   },
 
@@ -81,24 +83,50 @@ export default {
   },
 
   methods: {
+    //重新创建
+    infoAdd(taskInfo) {
+      this.infoIsShow = false;
+      this.isShow = true;
+      const obj = {};
+      obj.createType = 1;
+      obj.assignorId = taskInfo.assignorId;
+      obj.desc = taskInfo.desc;
+      obj.innerCode = taskInfo.innerCode;
+      obj.userId = 1;
+      obj.productType = taskInfo.taskType.typeId;
+      this.$refs.add.service = obj;
+      this.$refs.add.replenishment();
+    },
+    //查看详情
+    async getTaskInfoFn(info) {
+      this.infoIsShow = true;
+      this.getTaskInfo(info);
+    },
     //搜索页面
     searchFn(taskCode, status) {
       this.SET_TASK_SEARCH_CODE_AND_STATUS([taskCode, status]);
       this.SET_TASK_SEARCH_PAGE_SIZE();
       this.getMaintenance();
     },
+
     //获取上一页数据
     getLastMaintenanceList() {
       this.SET_TASK_SEARCH_PAGE_SIZE(-1);
       this.getMaintenance();
     },
+
     //获取下一页数据
     getNextMaintenanceList() {
       this.SET_TASK_SEARCH_PAGE_SIZE(1);
       this.getMaintenance();
     },
 
-    ...mapActions("operation", ["getMaintenance", "getAllTaskStatus"]),
+    ...mapActions("operation", [
+      "getMaintenance",
+      "getAllTaskStatus",
+      "getTaskInfo",
+      "getOperatorList",
+    ]),
     ...mapMutations("operation", [
       "SET_TASK_SEARCH_CODE_AND_STATUS",
       "SET_TASK_SEARCH_PAGE_SIZE",
@@ -106,7 +134,12 @@ export default {
   },
 
   computed: {
-    ...mapState("operation", ["mainList", "MaintenanceList", "typeList"]),
+    ...mapState("operation", [
+      "mainList",
+      "MaintenanceList",
+      "typeList",
+      "loading",
+    ]),
     ...mapGetters("operation", ["lastDisabled", "rightDisabled"]),
   },
 
@@ -115,6 +148,7 @@ export default {
     MyButton,
     FooterPage,
     MaintenanceAddDialog,
+    OpeInfoDialog,
   },
 };
 </script>

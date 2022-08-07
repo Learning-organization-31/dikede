@@ -1,4 +1,5 @@
-import { getTaskService, getAllTaskStatus } from "@/api/task";
+import { getTaskService, getAllTaskStatus, getTaskInfo } from "@/api/task";
+import { getOperatorList } from "@/api/user";
 import dayjs from "dayjs";
 
 export default {
@@ -19,6 +20,11 @@ export default {
     mainList: [],
     //所有工单类型列表
     typeList: [],
+    //运营人员列表
+    operatorList: [],
+    loading: false,
+    //工单详情数据
+    taskInfo: {},
   },
   mutations: {
     //修改运维工单数据
@@ -45,14 +51,25 @@ export default {
         state.taskSearch.pageIndex = 1;
       }
     },
+    //修改运营人员名单
+    SET_OPERATOR_LIST(state, payload) {
+      state.operatorList = payload;
+    },
+    //修改工单详情数据
+    SET_TASK_INFO(state, payload) {
+      state.taskInfo = payload;
+    },
   },
+
   actions: {
     // 获取运维工单数据
     async getMaintenance(context) {
       try {
+        context.state.loading = true;
         const res = await getTaskService(context.state.taskSearch);
         const arr = initList(res);
         context.commit("SET_MAIN_TENANCE_LIST", [res, arr]);
+        context.state.loading = false;
       } catch (error) {
         console.log(error);
       }
@@ -62,7 +79,22 @@ export default {
       const res = await getAllTaskStatus();
       context.commit("SET_ALL_TASK_STATUS", res);
     },
+    //获取运营人员
+    async getOperatorList(context, payload) {
+      try {
+        const res = await getOperatorList(payload.trim());
+        context.commit("SET_OPERATOR_LIST", res);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    //获取详情数据
+    async getTaskInfo(context, payload) {
+      const res = await getTaskInfo(payload.taskId);
+      context.commit("SET_TASK_INFO", res);
+    },
   },
+
   getters: {
     //计算出运维工单的左边按钮是否禁用
     lastDisabled(state) {
@@ -75,6 +107,14 @@ export default {
         state.taskSearch.pageIndex ==
         Math.ceil((state.MaintenanceList.totalCount - 0) / 10)
       );
+    },
+    //计算出上方图片应该怎么显示
+    imageShow(state) {
+      return state.taskInfo?.taskStatusTypeEntity?.statusId;
+    },
+    //图片旁文字
+    imageText(state) {
+      return state.taskInfo?.taskStatusTypeEntity?.statusName;
     },
   },
 };

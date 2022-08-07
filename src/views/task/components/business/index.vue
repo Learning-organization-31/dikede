@@ -8,7 +8,7 @@
       :typeList="typeList"
     />
     <!-- 搜索区域 -->
-    <div class="result">
+    <div class="result" v-loading="loading">
       <!-- 下方添加按钮 -->
       <div class="btn-title">
         <!-- 新建配置和弹窗 -->
@@ -118,6 +118,7 @@ export default {
       //用于遍历循环出列表
       currentPageRecords: [],
       taskInfo: {},
+      loading: false,
     };
   },
   created() {
@@ -130,6 +131,7 @@ export default {
     //运营工单数据
     async getTaskService() {
       try {
+        this.loading = true;
         this.taskList = await getTaskService(this.taskSearch);
         let arr = [];
         this.taskList.currentPageRecords.forEach((item, index) => {
@@ -152,6 +154,7 @@ export default {
         });
         this.currentPageRecords = arr;
         this.flag = true;
+        this.loading = false;
       } catch (error) {
         console.log(error);
       }

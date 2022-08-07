@@ -109,10 +109,10 @@ export default {
           { required: true, message: "设备编号不能为空", trigger: "blur" },
         ],
         productType: [
-          { required: true, message: "工单类型不能为空", trigger: "blur" },
+          { required: true, message: "工单类型不能为空", trigger: "change" },
         ],
-        userId: [
-          { required: true, message: "运营人员不能为空", trigger: "blur" },
+        assignorId: [
+          { required: true, message: "运营人员不能为空", trigger: "change" },
         ],
         desc: [{ required: true, message: "备注不能为空", trigger: "blur" }],
       },
