@@ -1,4 +1,5 @@
 import {
+  getNodeListApi,
   getorderAmountApi,
   getorderCountApi,
   getrepairCountApi,
@@ -18,6 +19,7 @@ export default {
     supplyCount: "", // 售货机补货次数
     repairCount: "", // 售货机维修次数
     skuCollect: [], // 售货机商品销量
+    NodeList: {}, // 点位列表
   },
   mutations: {
     // 更新售货机列表
@@ -47,6 +49,9 @@ export default {
     // 更新售货机商品销量
     updateskuCollect(state, payload) {
       state.skuCollect = payload;
+    },
+    updateNodeList(state, payload) {
+      state.NodeList = payload;
     },
   },
   actions: {
@@ -90,6 +95,12 @@ export default {
     async getskuCollect(context, innerCode) {
       const data = await getskuCollectApi(innerCode);
       context.commit("updateskuCollect", data);
+    },
+
+    // 获取点位
+    async getNodeList(context) {
+      const data = await getNodeListApi();
+      context.commit("updateNodeList", data);
     },
   },
 };

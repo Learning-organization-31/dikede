@@ -74,6 +74,7 @@ export default {
 
     // 点击搜索
     onsearch(value) {
+      if (this.loading) return; // 防抖
       this.getVmTypeList({ name: value });
     },
 

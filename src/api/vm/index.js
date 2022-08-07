@@ -13,7 +13,7 @@ export const getVmListApi = (params) => {
 export const getVmTypeListApi = (params) => {
   return request({
     url: "/api/vm-service/vmType/search",
-    params,
+    params: { pageSize: 10000, ...params },
   });
 };
 
@@ -65,5 +65,22 @@ export const getskuCollectApi = (innerCode) => {
   const end = dayjs().format("YYYY-MM-DD");
   return request({
     url: `/api/order-service/report/skuCollect/${innerCode}/${start}/${end}`,
+  });
+};
+
+// 获取点位
+export const getNodeListApi = () => {
+  return request({
+    url: "/api/vm-service/node/search",
+    params: { pageSize: 10000 },
+  });
+};
+
+// 新增售货机
+export const addvmServeApi = (data) => {
+  return request({
+    url: "/api/vm-service/vm",
+    method: "POST",
+    data,
   });
 };

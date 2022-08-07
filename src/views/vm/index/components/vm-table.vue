@@ -41,7 +41,12 @@ export default {
       if (value === 3) return "撤机";
     },
     // 详细地址
-    vmAddr(a, b, value) {
+    vmAddr(a, b, value, index) {
+      console.log(
+        value,
+        "=====",
+        this.vmList.currentPageRecords[index].node.name
+      );
       return value.split("-")[3];
     },
   },

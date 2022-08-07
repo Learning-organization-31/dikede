@@ -95,6 +95,7 @@ export default {
 
     // 点击搜索按钮
     searchBtn(value) {
+      if (this.loading) return; // 防抖
       this.getVmList({ innerCode: value });
     },
 
