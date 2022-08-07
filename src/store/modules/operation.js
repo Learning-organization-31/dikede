@@ -102,7 +102,6 @@ export default {
     },
     //计算出运维工单的右边按钮是否禁用
     rightDisabled(state) {
-      console.log;
       return (
         state.taskSearch.pageIndex ==
         Math.ceil((state.MaintenanceList.totalCount - 0) / 10)
