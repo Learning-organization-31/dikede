@@ -1,14 +1,13 @@
 <template>
   <!-- 弹出框 -->
   <Dialog
-    title="新增设备类型"
+    :title="title"
     :businessIsShow="businessIsShow"
     @close="onClose"
     @cancelBtn="onClose"
     @sureBtn="onSaveBtn"
-    v-loading="loading"
   >
-    <div class="vm-status-dia">
+    <div class="vm-status-dia" v-loading="loading">
       <!-- 模态框表单 -->
       <el-form
         ref="form"
@@ -86,8 +85,7 @@
 
 <script>
 import Dialog from "@/components/Dialog";
-import { Loading } from "element-ui";
-import { addvmTypeApi } from "@/api/vm/type";
+import { addvmTypeApi, getvmTypeDeilApi, exitvmTypeApi } from "@/api/vm/type";
 export default {
   data() {
     return {
@@ -124,24 +122,40 @@ export default {
   methods: {
     // 模态框点击确定
     async onSaveBtn() {
-      await this.$refs.form.validate();
+      if (this.loading) return; // 防抖
+      await this.$refs.form.validate(); // 校验表单
+      this.loading = true;
       try {
-        this.loading = true;
-        const data = await addvmTypeApi(this.addVmServeForm);
-        console.log(data);
+        if (this.addVmServeForm.typeId) {
+          // 修改
+          await exitvmTypeApi(this.addVmServeForm);
+          this.$message.success("修改售货机类型成功");
+        } else {
+          // 新增
+          await addvmTypeApi(this.addVmServeForm);
+          this.$message.success("新增售货机类型成功");
+        }
         this.$emit("addvmTypeSucc");
-        this.$message.success("新增售货机类型成功");
-        this.addVmServeForm = {};
         this.onClose();
       } catch (error) {
-        this.$message.error("新增售货机类型失败");
+        this.$message.error("操作售货机类型失败");
       } finally {
         this.loading = false;
       }
     },
 
+    // 获取售货机类型详情
+    async getvmTypeDeil(typeId) {
+      this.loading = true;
+      const data = await getvmTypeDeilApi(typeId);
+      this.addVmServeForm = data;
+      console.log(data);
+      this.loading = false;
+    },
+
     // 关闭模态框
     onClose() {
+      this.addVmServeForm = {};
       this.$emit("update:businessIsShow", false);
     },
 
@@ -160,6 +174,11 @@ export default {
         this.$message.error("上传头像图片大小不能超过 100kb!");
       }
       return isJPG && isLt2M;
+    },
+  },
+  computed: {
+    title() {
+      return this.addVmServeForm.typeId ? "修改设备类型" : "新增设备类型";
     },
   },
 };

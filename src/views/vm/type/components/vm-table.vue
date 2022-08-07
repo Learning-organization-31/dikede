@@ -20,8 +20,10 @@
     <el-table-column prop="vmCol" label="货道列" />
     <el-table-column prop="channelMaxCapacity" label="设备容量" />
     <el-table-column label="操作">
-      <span class="tb-span">修改</span>
-      <span class="tb-span del">删除</span>
+      <template v-slot="{ $index }">
+        <span class="tb-span" @click="exitVmServe($index)">修改</span>
+        <span class="tb-span del" @click="delVmServe($index)">删除</span>
+      </template>
     </el-table-column>
   </el-table>
 </template>
@@ -29,9 +31,21 @@
 <script>
 import { mapState } from "vuex";
 export default {
-  methods: {},
   computed: {
     ...mapState("vm", ["VmTypeList"]),
+  },
+  methods: {
+    // 点击编辑
+    exitVmServe(index) {
+      const typeId = this.VmTypeList.currentPageRecords[index].typeId;
+      this.$emit("exitVmServe", typeId);
+    },
+
+    // 点击删除
+    delVmServe(index) {
+      const typeId = this.VmTypeList.currentPageRecords[index].typeId;
+      this.$emit("delVmServe", typeId);
+    },
   },
 };
 </script>
