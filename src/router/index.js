@@ -67,19 +67,19 @@ export const constantRoutes = [
     children: [
       {
         path: "region",
-        component: () => import("@/views/node/components/region"), // Parent router-view
+        component: () => import("@/views/region"), // Parent router-view
         name: "Region",
         meta: { title: "区域管理" },
       },
       {
         path: "node",
-        component: () => import("@/views/node/components/node"),
+        component: () => import("@/views/node"),
         name: "SonNode",
         meta: { title: "点位管理" },
       },
       {
         path: "partner",
-        component: () => import("@/views/node/components/partner"),
+        component: () => import("@/views/partner"),
         name: "Partner",
         meta: { title: "合作商管理" },
       },
@@ -98,19 +98,19 @@ export const constantRoutes = [
     children: [
       {
         path: "index",
-        component: () => import("@/views/vm/components/index"), // Parent router-view
+        component: () => import("@/views/vm/index"), // Parent router-view
         name: "Index",
         meta: { title: "设备管理" },
       },
       {
         path: "status",
-        component: () => import("@/views/vm/components/status"),
+        component: () => import("@/views/vm/status"),
         name: "Status",
         meta: { title: "设备状态" },
       },
       {
         path: "type",
-        component: () => import("@/views/vm/components/type"),
+        component: () => import("@/views/vm/type"),
         name: "Type",
         meta: { title: "设备类型管理" },
       },
