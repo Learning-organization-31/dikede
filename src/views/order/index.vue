@@ -104,7 +104,6 @@ export default {
   methods: {
     ...mapActions('order', ['setGetOrderList']),
     searchFn(taskCode) {
-      console.log(taskCode)
       this.page = 1
       if (taskCode[0] === null && taskCode[1] === null) {
         this.setGetOrderList([this.page, 10])
@@ -144,7 +143,6 @@ export default {
 
     itemOrder(val) {
       this.itemInfo = val
-      console.log(val)
       this.infoIsShow = true
     },
   },
