@@ -5,7 +5,15 @@ import app from './modules/app'
 import settings from './modules/settings'
 import user from './modules/user'
 import task from './modules/task'
+import policy from './modules/policy'
 import createVuexPersisted from 'vuex-persistedstate'
+import vm from './modules/vm'
+
+import region from './modules/region'
+import node from './modules/node'
+
+import partner from './modules/partner'
+import operation from './modules/operation'
 
 Vue.use(Vuex)
 
@@ -15,6 +23,14 @@ const store = new Vuex.Store({
     settings,
     user,
     task,
+
+    policy,
+
+    vm,
+    operation,
+    region,
+    node,
+    partner,
   },
   getters,
   plugins: [
