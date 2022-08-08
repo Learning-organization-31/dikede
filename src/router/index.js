@@ -98,19 +98,19 @@ export const constantRoutes = [
     children: [
       {
         path: "index",
-        component: () => import("@/views/vm/components/index"), // Parent router-view
+        component: () => import("@/views/vm/index"), // Parent router-view
         name: "Index",
         meta: { title: "设备管理" },
       },
       {
         path: "status",
-        component: () => import("@/views/vm/components/status"),
+        component: () => import("@/views/vm/status"),
         name: "Status",
         meta: { title: "设备状态" },
       },
       {
         path: "type",
-        component: () => import("@/views/vm/components/type"),
+        component: () => import("@/views/vm/type"),
         name: "Type",
         meta: { title: "设备类型管理" },
       },
@@ -120,7 +120,7 @@ export const constantRoutes = [
   {
     path: "/user",
     component: Layout,
-    redirect: "/user/index",
+    redirect: "/user/user-list/index",
     name: "User",
     meta: {
       title: "人员管理",
@@ -129,19 +129,19 @@ export const constantRoutes = [
     children: [
       {
         path: "index",
-        component: () => import("@/views/user/components/index"), // Parent router-view
+        component: () => import("@/views/user/user-list/index"), // Parent router-view
         name: "userIndex",
         meta: { title: "人员列表" },
       },
       {
         path: "user-task-stats",
-        component: () => import("@/views/user/components/user-task-stats"),
+        component: () => import("@/views/user/user-task-stats"),
         name: "User-task-stats",
         meta: { title: "人效统计" },
       },
       {
         path: "user-work",
-        component: () => import("@/views/user/components/user-work"),
+        component: () => import("@/views/user/user-work"),
         name: "User-work",
         meta: { title: "工作量列表" },
       },
