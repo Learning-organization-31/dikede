@@ -172,8 +172,4 @@ export default {
   width: 100%;
   background-color: #fff;
 }
-::v-deep .el-table__body-wrapper::-webkit-scrollbar {
-  opacity: 0;
-  width: 0;
-}
 </style>
