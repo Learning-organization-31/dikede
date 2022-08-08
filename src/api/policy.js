@@ -35,3 +35,11 @@ export const addPolicyItem = (data) => {
     data,
   })
 }
+
+export const editPolicyItem = (policyId, data) => {
+  return request({
+    url: '/api/vm-service/policy/' + policyId,
+    method: 'PUT',
+    data,
+  })
+}
