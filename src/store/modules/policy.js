@@ -3,6 +3,7 @@ import {
   getPolicyItemList,
   deletePolicyItem,
   addPolicyItem,
+  editPolicyItem,
 } from '@/api/policy'
 import dayjs from 'dayjs'
 export default {
@@ -50,6 +51,11 @@ export default {
     },
     async addPolicyItemFn(context, payload) {
       const res = await addPolicyItem(payload)
+      console.log(res)
+    },
+    async editPolicyItemFn(context, payload) {
+      console.log(payload)
+      const res = await editPolicyItem(payload[0], payload[1])
       console.log(res)
     },
   },
