@@ -182,7 +182,6 @@ export default {
     editDialogShow(val) {
       this.isShowDeit = true
       this.itemInfo = val
-      console.log(val)
     },
 
     getLastTaskService() {

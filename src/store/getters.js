@@ -6,6 +6,6 @@ const getters = {
   name: (state) => state.user.name,
   policyList: (state) => state.policy.policyList,
   policyItemList: (state) => state.policy.policyItemList,
-
+  orderList: (state) => state.order.orderList,
 }
 export default getters
