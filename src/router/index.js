@@ -160,13 +160,13 @@ export const constantRoutes = [
     children: [
       {
         path: "sku-class",
-        component: () => import("@/views/sku/components/sku-class"), // Parent router-view
+        component: () => import("@/views/sku-class"), // Parent router-view
         name: "Sku-class",
         meta: { title: "商品类型" },
       },
       {
         path: "sku",
-        component: () => import("@/views/sku/components/sku"),
+        component: () => import("@/views/sku"),
         name: "Sonsku",
         meta: { title: "商品管理" },
       },
