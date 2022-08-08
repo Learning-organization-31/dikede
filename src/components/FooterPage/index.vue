@@ -1,24 +1,26 @@
 <template>
   <!-- 页码 -->
   <div class="total" v-if="!listIsShow">
-    <span
-      >共{{ taskList.totalCount }}条数据 第{{ taskList.pageIndex }}/
-      {{ Math.ceil(taskList.totalCount / 10) }}页</span
-    >
-    <div class="page-button">
-      <MyButton
-        :btnStyle="pageBtnStyle"
-        :disabled="lastDisabled"
-        @click="lastPage"
-        >上一页
-      </MyButton>
-      <MyButton
-        :btnStyle="pageBtnStyle"
-        :disabled="rightDisabled"
-        @click="nextPage"
-        >下一页
-      </MyButton>
-    </div>
+    <template v-if="lastDisabled === false || rightDisabled === false">
+      <span
+        >共{{ taskList.totalCount }}条数据 第{{ taskList.pageIndex }}/
+        {{ Math.ceil(taskList.totalCount / 10) }}页</span
+      >
+      <div class="page-button">
+        <MyButton
+          :btnStyle="pageBtnStyle"
+          :disabled="lastDisabled"
+          @click="lastPage"
+          >上一页
+        </MyButton>
+        <MyButton
+          :btnStyle="pageBtnStyle"
+          :disabled="rightDisabled"
+          @click="nextPage"
+          >下一页
+        </MyButton>
+      </div>
+    </template>
   </div>
   <!-- 页码 -->
 </template>
