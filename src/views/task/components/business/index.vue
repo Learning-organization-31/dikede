@@ -8,7 +8,7 @@
       :typeList="typeList"
     />
     <!-- 搜索区域 -->
-    <div class="result">
+    <div class="result" v-loading="loading">
       <!-- 下方添加按钮 -->
       <div class="btn-title">
         <!-- 新建配置和弹窗 -->
@@ -44,7 +44,8 @@
         <el-table-column prop="createType" label="工单方式"> </el-table-column>
         <el-table-column prop="taskStatus" label="工单状态"> </el-table-column>
         <el-table-column prop="userName" label="运营人员"> </el-table-column>
-        <el-table-column prop="createTime" label="创建日期"> </el-table-column>
+        <el-table-column prop="createTime" label="创建日期" width="180px">
+        </el-table-column>
         <el-table-column prop="taskId" label="操作">
           <template slot-scope="scope">
             <span class="col-text" @click="getTaskInfo(scope.row)"
@@ -117,6 +118,7 @@ export default {
       //用于遍历循环出列表
       currentPageRecords: [],
       taskInfo: {},
+      loading: false,
     };
   },
   created() {
@@ -129,6 +131,7 @@ export default {
     //运营工单数据
     async getTaskService() {
       try {
+        this.loading = true;
         this.taskList = await getTaskService(this.taskSearch);
         let arr = [];
         this.taskList.currentPageRecords.forEach((item, index) => {
@@ -151,6 +154,7 @@ export default {
         });
         this.currentPageRecords = arr;
         this.flag = true;
+        this.loading = false;
       } catch (error) {
         console.log(error);
       }
@@ -159,10 +163,8 @@ export default {
     //点击搜索按钮触发获取工单数据
     searchFn(taskCode, status) {
       this.taskSearch.pageIndex = 1;
-      if (taskCode || status) {
-        this.taskSearch.taskCode = taskCode;
-        this.taskSearch.status = status;
-      }
+      this.taskSearch.taskCode = taskCode;
+      this.taskSearch.status = status;
       this.getTaskService();
     },
     //获取工单类型列表
