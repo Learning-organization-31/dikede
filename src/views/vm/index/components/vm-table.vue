@@ -19,9 +19,11 @@
     <el-table-column prop="ownerName" label="合作商" />
     <el-table-column prop="vmStatus" :formatter="vmStatus" label="设备状态" />
     <el-table-column label="操作">
-      <span class="tb-span">货道</span>
-      <span class="tb-span">策略</span>
-      <span class="tb-span">修改</span>
+      <template v-slot="{ $index }">
+        <span class="tb-span" @click="channelClick($index)">货道</span>
+        <span class="tb-span" @click="strategyClick($index)">策略</span>
+        <span class="tb-span" @click="exitVmServe($index)">修改</span>
+      </template>
     </el-table-column>
   </el-table>
 </template>
@@ -29,6 +31,11 @@
 <script>
 import { mapState } from "vuex";
 export default {
+  data() {
+    return {
+      multipleSelection: [], // 表单复选框内容
+    };
+  },
   methods: {
     // 表单复选框
     handleSelectionChange(val) {
@@ -42,7 +49,21 @@ export default {
     },
     // 详细地址
     vmAddr(a, b, value) {
-      return value.split("-")[3];
+      // return value.split("-")[3] ? value.split("-")[3] : value.split("-")[1];
+      return value.split("-")[3] ? value.split("-")[3] : value;
+    },
+    // 点击策略
+    strategyClick(index) {
+      const innerCode = this.vmList.currentPageRecords[index].innerCode;
+      this.$emit("strategyClick", innerCode);
+    },
+    // 点击修改
+    exitVmServe(index) {
+      this.$emit("exitVmServe", this.vmList.currentPageRecords[index]);
+    },
+    // 点击货道
+    channelClick(index) {
+      this.$emit("channelClick", this.vmList.currentPageRecords[index]);
     },
   },
   computed: {

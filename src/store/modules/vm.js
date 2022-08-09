@@ -1,11 +1,16 @@
 import {
+  getbusinessTopListApi,
   getNodeListApi,
   getorderAmountApi,
   getorderCountApi,
+  getPolicyListApi,
   getrepairCountApi,
   getskuCollectApi,
+  getskuSearchApi,
   getsupplyCountApi,
+  getVmchannelListApi,
   getVmListApi,
+  getVmPolicyApi,
   getVmTypeListApi,
 } from "@/api/vm/index";
 
@@ -20,6 +25,11 @@ export default {
     repairCount: "", // 售货机维修次数
     skuCollect: [], // 售货机商品销量
     NodeList: {}, // 点位列表
+    PolicyList: [], // 策略列表
+    VmPolicy: {}, // 售货机策略
+    VmchannelList: [], // 售货机货道详情
+    businessTopList: [], // 圈下销量前10的商品(补货推荐)
+    skuSearchList: {}, // 商品搜索列表
   },
   mutations: {
     // 更新售货机列表
@@ -50,8 +60,29 @@ export default {
     updateskuCollect(state, payload) {
       state.skuCollect = payload;
     },
+    // 更新点位列表
     updateNodeList(state, payload) {
       state.NodeList = payload;
+    },
+    // 更新策略列表
+    updatePolicyList(state, payload) {
+      state.PolicyList = payload;
+    },
+    // 更新售货机策略
+    updateVmPolicy(state, payload) {
+      state.VmPolicy = payload;
+    },
+    // 更新售货机货道详情
+    updateVmchannelList(state, payload) {
+      state.VmchannelList = payload;
+    },
+    // 更新商圈下销量前10的商品(补货推荐)
+    updatebusinessTopList(state, payload) {
+      state.businessTopList = payload;
+    },
+    // 更新商品搜索
+    updateskuSearchList(state, payload) {
+      state.skuSearchList = payload;
     },
   },
   actions: {
@@ -101,6 +132,36 @@ export default {
     async getNodeList(context) {
       const data = await getNodeListApi();
       context.commit("updateNodeList", data);
+    },
+
+    // 获取策略管理列表
+    async getPolicyList(context, params) {
+      const data = await getPolicyListApi(params);
+      context.commit("updatePolicyList", data);
+    },
+
+    // 查询售货机策略
+    async getVmPolicy(context, innerCode) {
+      const data = await getVmPolicyApi(innerCode);
+      context.commit("updateVmPolicy", data);
+    },
+
+    // 获取售货机货道详情
+    async getVmchannelList(context, innerCode) {
+      const data = await getVmchannelListApi(innerCode);
+      context.commit("updateVmchannelList", data);
+    },
+
+    // 获取商圈下销量前10的商品(补货推荐)
+    async getbusinessTopList(context, businessId) {
+      const data = await getbusinessTopListApi(businessId);
+      context.commit("updatebusinessTopList", data);
+    },
+
+    // 商品搜索
+    async getskuSearchList(context, payload) {
+      const data = await getskuSearchApi(payload);
+      context.commit("updateskuSearchList", data);
     },
   },
 };
