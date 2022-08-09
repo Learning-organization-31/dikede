@@ -58,7 +58,7 @@ export default {
             name: "合作商点照射Top5",
             type: "pie",
             radius: [20, 100],
-            center: ["30%", "50%"],
+            center: ["50%", "50%"],
             roseType: "radius",
             data: this.NodeCollect,
           },

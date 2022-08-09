@@ -7,7 +7,6 @@
   >
     <!-- 列表 -->
     <el-table
-      v-loading="loading"
       :data="infoList"
       :height="infoList[0] ? '528' : '120'"
       stripe
@@ -45,9 +44,7 @@ export default {
   methods: {
     //每次点击获取最新的点位详情数据,通过watch监视rowInfo的改动进行获取
     async getInfo() {
-      this.loading = true;
       this.infoList = await getNodeInfo(this.rowInfo.id);
-      this.loading = false;
     },
     //关闭弹层
     closeFn() {
