@@ -15,15 +15,48 @@
         >
           新建
         </MyButton>
-        <!-- 工单配置和弹窗 -->
-        <MyButton :btnStyle="businessBtnStyle"> 批量操作 </MyButton>
+
+        <!-- 批量操作按钮 -->
+        <MyButton :btnStyle="businessBtnStyle" @click="changeClick">
+          批量操作
+        </MyButton>
       </div>
 
       <!-- 新建按钮弹窗 -->
       <vmDialog :businessIsShow.sync="businessIsShow" />
 
+      <!-- 批量操作弹窗 -->
+      <vmChangeDia
+        :multipleSelection="multipleSelection"
+        :changebusinessIsShow.sync="changebusinessIsShow"
+      />
+
       <!-- 表单 -->
-      <vmTable v-loading="loading" />
+      <vmTable
+        ref="vmTable"
+        v-loading="loading"
+        @strategyClick="strategyClick"
+        @exitVmServe="exitVmServe"
+        @channelClick="channelClick"
+      />
+
+      <!-- 策略管理弹窗 -->
+      <vmStrategyDia :StrategyDiaIsShow.sync="StrategyDiaIsShow" />
+
+      <!-- 修改按钮弹窗 -->
+      <vmExitDia
+        ref="vmExitDia"
+        :exitDiaIsShow.sync="exitDiaIsShow"
+        :vmServerDeil="vmServerDeil"
+        @updateView="getMyVmList"
+      />
+
+      <!-- 货道按钮弹窗 -->
+      <vmChannelDia
+        :channelDiaIsShow.sync="channelDiaIsShow"
+        :VmServeDeil="VmServeDeil"
+        :rowDeil="rowDeil"
+      />
 
       <!-- 底部按钮 -->
       <FooterPage
@@ -44,7 +77,13 @@ import MyButton from "@/components/MyButton";
 import vmTable from "./components/vm-table";
 import FooterPage from "@/components/FooterPage";
 import vmDialog from "./components/vm-dialog.vue";
+import vmChangeDia from "./components/vm-change-dia.vue";
+import vmStrategyDia from "./components/vm-strategy-dia.vue";
+import vmExitDia from "./components/vm-exit-dia.vue";
+import vmChannelDia from "./components/vm-channel-dia.vue";
 import { mapActions, mapState } from "vuex";
+import { getVmServeDeilApi } from "@/api/vm/index";
+
 export default {
   name: "",
   data() {
@@ -58,24 +97,49 @@ export default {
         background: "#fbf4f0",
         color: "#655b56",
       },
-      multipleSelection: [], // 全选按钮
       loading: false,
       businessIsShow: false,
+      changebusinessIsShow: false,
+      StrategyDiaIsShow: false,
+      exitDiaIsShow: false,
+      channelDiaIsShow: false,
+      vmServerDeil: {},
+      multipleSelection: [], // 全选按钮内容
+      pageIndex: 1,
+      VmServeDeil: {},
+      rowDeil: {},
     };
   },
-  components: { SearchBar, MyButton, vmTable, FooterPage, vmDialog },
+  components: {
+    SearchBar,
+    MyButton,
+    vmTable,
+    FooterPage,
+    vmDialog,
+    vmChangeDia,
+    vmStrategyDia,
+    vmExitDia,
+    vmChannelDia,
+  },
 
   created() {
     this.getMyVmList();
   },
 
   methods: {
-    ...mapActions("vm", ["getVmList", "getVmTypeList", "getNodeList"]),
+    ...mapActions("vm", [
+      "getVmList",
+      "getVmTypeList",
+      "getNodeList",
+      "getPolicyList",
+      "getVmPolicy",
+      "getVmchannelList",
+    ]),
 
     // 获取售货机列表
-    async getMyVmList(payload) {
+    async getMyVmList() {
       this.loading = true;
-      await this.getVmList(payload);
+      await this.getVmList({ pageIndex: this.pageIndex });
       this.loading = false;
     },
 
@@ -94,18 +158,60 @@ export default {
     // 点击上一页
     lastPage() {
       if (this.loading) return; // 防抖
-      this.getMyVmList({ pageIndex: this.vmList.pageIndex - 1 });
+      this.pageIndex -= 1;
+      this.getMyVmList();
     },
 
     // 点击下一页
     nextPage() {
       if (this.loading) return; // 防抖
-      this.getMyVmList({ pageIndex: this.vmList.pageIndex - 0 + 1 });
+      this.pageIndex += 1;
+      this.getMyVmList();
+    },
+
+    // 点击批量操作按钮打开弹窗
+    changeClick() {
+      const multipleSelection = this.$refs.vmTable.multipleSelection;
+      if (!multipleSelection.length) {
+        return this.$message.warning("请勾选售货机");
+      }
+      this.multipleSelection = multipleSelection;
+      this.getPolicyList();
+      this.changebusinessIsShow = true;
+    },
+
+    // 点击策略
+    async strategyClick(innerCode) {
+      await this.getVmPolicy(innerCode);
+
+      if (!this.VmPolicy) {
+        this.getPolicyList();
+        this.multipleSelection = [innerCode];
+        this.changebusinessIsShow = true;
+        return;
+      }
+      this.StrategyDiaIsShow = true;
+    },
+
+    // 点击修改
+    exitVmServe(vmServerDeil) {
+      this.getNodeList();
+      this.vmServerDeil = vmServerDeil;
+      this.$refs.vmExitDia.nodeId = vmServerDeil.node.id;
+      this.exitDiaIsShow = true;
+    },
+
+    // 点击货道
+    async channelClick(rowDeil) {
+      this.getVmchannelList(rowDeil.innerCode);
+      this.VmServeDeil = await getVmServeDeilApi(rowDeil.type.typeId);
+      this.channelDiaIsShow = true;
+      this.rowDeil = rowDeil;
     },
   },
 
   computed: {
-    ...mapState("vm", ["vmList"]),
+    ...mapState("vm", ["vmList", "VmPolicy"]),
 
     // 是否禁用上一页
     lastDisabled() {
