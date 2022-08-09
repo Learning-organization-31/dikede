@@ -27,7 +27,6 @@ export default {
         payload[1],
         payload[2] ? payload[2] : ''
       )
-      console.log(res)
       res.currentPageRecords.forEach((ele) => {
         //     ele.createTime = ele.createTime.replace(/T/gi, ' ')
         //     ele.createTime = ele.createTime.replace(/-/gi, '.')
@@ -41,22 +40,17 @@ export default {
         payload?.[1],
         payload?.[2]
       )
-      console.log(res)
+
       context.commit('setPolicyItemList', res)
     },
     async delPolicyItem(context, payload) {
-      console.log(payload)
-      const res = await deletePolicyItem(payload)
-      console.log(res)
+      await deletePolicyItem(payload)
     },
     async addPolicyItemFn(context, payload) {
-      const res = await addPolicyItem(payload)
-      console.log(res)
+      await addPolicyItem(payload)
     },
     async editPolicyItemFn(context, payload) {
-      console.log(payload)
-      const res = await editPolicyItem(payload[0], payload[1])
-      console.log(res)
+      await editPolicyItem(payload[0], payload[1])
     },
   },
 }

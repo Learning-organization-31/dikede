@@ -78,7 +78,7 @@
                         <span
                           class="del-btn"
                           @click="delBtn(item)"
-                          :class="{ disab: !item.skuId }"
+                          :class="{ disab: item.skuId == '0' }"
                           >删除</span
                         >
                       </div>

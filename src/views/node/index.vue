@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div v-loading="loading">
     <SerchBar
       lastInpTitle="点位搜索"
       rightInpTitle="区域搜索"
       @search="searchFn"
       :typeList="typeList"
     />
-    <div class="result" v-loading="loading">
+    <div class="result">
       <div class="btn-title">
         <MyButton
           icon="el-icon-circle-plus-outline"

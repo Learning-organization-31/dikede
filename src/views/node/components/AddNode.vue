@@ -74,11 +74,11 @@
             v-model="addrTop"
           ></el-cascader>
         </el-form-item>
-        <el-form-item prop="addr">
+        <el-form-item prop="addr1">
           <el-input
             type="textarea"
             placeholder="请输入详细地址"
-            v-model="addNodeRequire.addr"
+            v-model="addNodeRequire.addr1"
             maxlength="60"
             show-word-limit
           >
@@ -113,6 +113,7 @@ export default {
         businessId: "", //所属商圈Id
         ownerId: "", //合作商Id
         ownerName: "", //合作商名称
+        addr1: "",
       },
       addrTop: [],
       //暂存详细地址,用来发送请求失败时拿回数据
@@ -149,7 +150,7 @@ export default {
         this.addNodeRequire.createUserId = this.userInfo.userId;
 
         //将地址进行缝合   先保存缝合前的数据 防止发送失败时数据错误
-        this.mapAddr = this.addNodeRequire.addr;
+        this.mapAddr = this.addNodeRequire.addr1;
 
         this.addNodeRequire.addr =
           CodeToText[this.addrTop[0]] +
@@ -183,7 +184,7 @@ export default {
         this.closeFn();
       } catch (error) {
         if (error.response?.status) {
-          this.addNodeRequire.addr = this.mapAddr;
+          this.addNodeRequire.addr1 = this.mapAddr;
           this.$message.error(error.response.data);
         }
       }
@@ -199,7 +200,6 @@ export default {
 
     //通过父级调用修改点位
     setNodeInfo(row) {
-      console.log(row);
       this.addNodeRequire.name = row.name;
       this.addNodeRequire.regionId = row.regionId;
       this.addNodeRequire.businessId = row.businessId;
@@ -207,14 +207,16 @@ export default {
       this.addNodeRequire.id = row.id;
       const arr = row.addr.split("-");
       if (arr.length === 4) {
-        this.addNodeRequire.addr = arr[3];
+        this.addNodeRequire.addr1 = arr[3];
         const textArr = [];
         textArr.push(TextToCode[arr[0]].code);
         textArr.push(TextToCode[arr[0]][arr[1]].code);
         textArr.push(TextToCode[arr[0]][arr[1]][arr[2]].code);
         this.addrTop = textArr;
       } else {
-        this.addNodeRequire.addr = arr[1];
+        if (arr[1]) {
+          this.addNodeRequire.addr1 = arr[1];
+        }
       }
     },
 

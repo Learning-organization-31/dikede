@@ -15,6 +15,7 @@
       </MyButton>
       <!-- 列表 -->
       <el-table
+        v-loading="loading"
         size="medium"
         :data="policyList.currentPageRecords"
         highlight-current-row
@@ -80,7 +81,11 @@
       <div class="dialogMain">
         <div style="margin: 0 10px; padding-top: 10px">策略方案:</div>
         <div style="margin-top: -4px; flex: 1">
-          <el-table :data="policyItemList.currentPageRecords" fit>
+          <el-table
+            :data="policyItemList.currentPageRecords"
+            fit
+            v-loading="isloading"
+          >
             <el-table-column
               type="index"
               label="序号"
@@ -117,28 +122,30 @@
 </template>
 
 <script>
-import AddDialog from "./components/AddDialog";
-import DelDialog from "./components/DelDialog";
-import SearchBar from "@/components/SerchBar";
-import MyButton from "@/components/MyButton";
-import FooterPage from "@/components/FooterPage";
-import Dialog from "@/components/Dialog";
-import { mapActions, mapGetters } from "vuex";
+import AddDialog from './components/AddDialog'
+import DelDialog from './components/DelDialog'
+import SearchBar from '@/components/SerchBar'
+import MyButton from '@/components/MyButton'
+import FooterPage from '@/components/FooterPage'
+import Dialog from '@/components/Dialog'
+import { mapActions, mapGetters } from 'vuex'
 export default {
-  name: "policy",
+  name: 'policy',
   data() {
     return {
       addBtnStyle: {
-        background: "linear-gradient(135deg,#ff9743,#ff5e20)",
+        background: 'linear-gradient(135deg,#ff9743,#ff5e20)',
       },
       page: 1,
       pageNext: 1,
       dialogTableVisible: false,
-      id: "",
+      id: '',
       isShowAdd: false,
       isShowDeit: false,
       itemInfo: {},
-    };
+      loading: false,
+      isloading: false,
+    }
   },
   components: {
     SearchBar,
@@ -149,111 +156,117 @@ export default {
     DelDialog,
   },
 
-  created() {
-    this.setPolicyList([this.page, 10]);
+  async created() {
+    this.loading = true
+    await this.setPolicyList([this.page, 10])
+    this.loading = false
   },
 
   methods: {
-    ...mapActions("policy", [
-      "setPolicyList",
-      "setPolicyItemList",
-      "delPolicyItem",
+    ...mapActions('policy', [
+      'setPolicyList',
+      'setPolicyItemList',
+      'delPolicyItem',
     ]),
     indexMethod(index) {
-      if (this.policyList.pageIndex == 1) return index + 1;
-      else return index + 1 + this.policyList.pageIndex * 10 - 10;
+      if (this.policyList.pageIndex == 1) return index + 1
+      else return index + 1 + this.policyList.pageIndex * 10 - 10
     },
     //item
     indexMethodNext(index) {
-      if (this.policyItemList.pageIndex == 1) return index + 1;
-      else return index + 1 + this.policyItemList.pageIndex * 10 - 10;
+      if (this.policyItemList.pageIndex == 1) return index + 1
+      else return index + 1 + this.policyItemList.pageIndex * 10 - 10
     },
     searchFn(taskCode) {
       try {
-        this.setPolicyList([this.page, 10, taskCode]);
-        this.$message.success("搜索成功");
+        this.setPolicyList([this.page, 10, taskCode])
+        this.$message.success('搜索成功')
       } catch (error) {
-        this.$message.error("搜索失败");
+        this.$message.error('搜索失败')
       }
     },
     addDialogShow() {
-      this.isShowAdd = true;
+      this.isShowAdd = true
     },
     editDialogShow(val) {
-      this.isShowDeit = true;
-      this.itemInfo = val;
+      this.isShowDeit = true
+      this.itemInfo = val
     },
 
     getLastTaskService() {
-      this.page--;
-      this.setPolicyList([this.page, 10]);
+      this.page--
+      this.setPolicyList([this.page, 10])
     },
     getNextTaskService() {
-      this.page++;
-      this.setPolicyList([this.page, 10]);
+      this.page++
+      this.setPolicyList([this.page, 10])
     },
 
     //item
-    getLastTaskServiceNext() {
-      this.pageNext--;
-      this.setPolicyItemList([this.id, this.pageNext, 10]);
+    async getLastTaskServiceNext() {
+      this.isloading = true
+      this.pageNext--
+      await this.setPolicyItemList([this.id, this.pageNext, 10])
+      this.isloading = false
     },
-    getNextTaskServiceNext() {
-      this.pageNext++;
-      this.setPolicyItemList([this.id, this.pageNext, 10]);
+    async getNextTaskServiceNext() {
+      this.isloading = true
+      this.pageNext++
+      await this.setPolicyItemList([this.id, this.pageNext, 10])
+      this.isloading = false
     },
 
     itemDetails(val) {
-      this.id = val;
-      this.dialogTableVisible = true;
-      this.setPolicyItemList([val, this.pageNext, 10]);
+      this.id = val
+      this.dialogTableVisible = true
+      this.setPolicyItemList([val, this.pageNext, 10])
     },
     closeFn() {
-      this.dialogTableVisible = false;
-      this.pageNext = 1;
+      this.dialogTableVisible = false
+      this.pageNext = 1
     },
     async delClickFn(val) {
       try {
-        await this.delPolicyItem(val);
-        await this.setPolicyList([this.page, 10]);
-        this.$message.success("删除成功");
+        await this.delPolicyItem(val)
+        await this.setPolicyList([this.page, 10])
+        this.$message.success('删除成功')
       } catch (error) {
-        this.$message.error("删除失败");
+        this.$message.error('删除失败')
       }
     },
   },
 
   computed: {
-    ...mapGetters(["policyList", "policyItemList"]),
+    ...mapGetters(['policyList', 'policyItemList']),
 
     //控制列表数量显示隐藏
     listIsShow() {
-      return !this.policyList.currentPageRecords?.[0];
+      return !this.policyList.currentPageRecords?.[0]
     },
     //控制上一页的按钮是否禁用
     lastDisabled() {
-      return this.policyList.pageIndex <= 1;
+      return this.policyList.pageIndex <= 1
     },
     //控制下一页的按钮是否禁用
     rightDisabled() {
-      return this.policyList.pageIndex == this.policyList.totalPage;
+      return this.policyList.pageIndex == this.policyList.totalPage
     },
 
     // item
     //控制列表数量显示隐藏
     listIsShowNext() {
-      return !this.policyItemList.currentPageRecords?.[0];
+      return !this.policyItemList.currentPageRecords?.[0]
     },
     //控制上一页的按钮是否禁用
     lastDisabledNext() {
-      return this.policyItemList.pageIndex <= 1;
+      return this.policyItemList.pageIndex <= 1
     },
     //控制下一页的按钮是否禁用
     rightDisabledNext() {
-      return this.policyItemList.pageIndex == this.policyItemList.totalPage;
+      return this.policyItemList.pageIndex == this.policyItemList.totalPage
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div v-loading="loading">
     <SerchBar lastInpTitle="合作商搜索" @search="searchParthner" />
-    <div class="result" v-loading="loading">
+    <div class="result">
       <div class="btn-title">
         <MyButton
           icon="el-icon-circle-plus-outline"

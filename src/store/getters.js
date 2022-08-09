@@ -7,5 +7,7 @@ const getters = {
   policyList: (state) => state.policy.policyList,
   policyItemList: (state) => state.policy.policyItemList,
   orderList: (state) => state.order.orderList,
+  partnersList: (state) => state.report.partnersList,
+  partnerNameList: (state) => state.report.partnerNameList,
 }
 export default getters
