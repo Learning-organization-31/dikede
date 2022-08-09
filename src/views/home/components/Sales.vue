@@ -64,9 +64,7 @@ export default {
     };
   },
 
-  created() {
-    console.log(dayjs("2022-08-07").format("MM月DD日"));
-  },
+  created() {},
 
   mounted() {
     //进入页面获取销售数据用于渲染条形图
@@ -203,7 +201,6 @@ export default {
       }
       this.AmountCollect = res;
       this.drawLine();
-      console.log(this.AmountCollect);
     },
 
     //获取柱形图的数据
@@ -212,7 +209,6 @@ export default {
       res.series = res.series.map((item) => item / 100);
       this.RegionCollect = res;
       this.drawCategory();
-      console.log(this.RegionCollect);
     },
 
     //切换为周
