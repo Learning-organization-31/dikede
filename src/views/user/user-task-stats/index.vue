@@ -138,8 +138,7 @@ export default {
 
   methods: {
     async getPeopleCount() {
-      const res = await getCountApi();
-      console.log(res);
+      await getCountApi();
     },
     ...mapActions("people", ["setAreaList"]),
     async getPeopleCount(payload) {

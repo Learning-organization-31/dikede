@@ -21,7 +21,6 @@
 
 <script>
 //引入搜索框和按钮组件
-import { getPeopleListApi } from "@/api/people";
 import Dialog from "@/components/Dialog";
 import SerchBar from "./components/detail.vue";
 import Button from "@/components/MyButton";

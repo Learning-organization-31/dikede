@@ -11,25 +11,22 @@
       <el-table-column
         prop="pageIndex"
         label="序号"
-        width="100"
+        width="80"
         type="index"
         :index="indexMethod"
         empty-text="暂无数据"
       >
       </el-table-column>
-      <el-table-column prop="userName" label="人员名称" width="180">
+      <el-table-column prop="userName" label="人员名称"> </el-table-column>
+      <el-table-column prop="roleName" label="角色"> </el-table-column>
+      <el-table-column prop="mobile" label="联系电话"> </el-table-column>
+      <el-table-column prop="workCount" label="完成工单(本月)">
       </el-table-column>
-      <el-table-column prop="roleName" label="角色" width="180">
+      <el-table-column prop="progressTotal" label="进行中工单">
       </el-table-column>
-      <el-table-column prop="mobile" label="联系电话" width="180">
+      <el-table-column prop="cancelCount" label="拒绝工单(本月)">
       </el-table-column>
-      <el-table-column prop="workCount" label="完成工单(本月)" width="160">
-      </el-table-column>
-      <el-table-column prop="progressTotal" label="进行中工单" width="160">
-      </el-table-column>
-      <el-table-column prop="cancelCount" label="拒绝工单(本月)" width="160">
-      </el-table-column>
-      <el-table-column prop="taskId" label="操作" width="160">
+      <el-table-column prop="taskId" label="操作" width="120">
         <!-- slot-scope="scope" -->
         <template v-slot="{ row }">
           <el-button @click="sureBtn(row.userId)" type="text" size="small">
@@ -66,13 +63,6 @@
             width="160"
           >
           </el-table-column>
-          <!-- <el-table-column
-            v-for="item in tableTitle"
-            :key="item.name"
-            :prop="item.name"
-            :label="item.title"
-            width="160"
-          ></el-table-column> -->
         </el-table>
       </el-dialog>
     </div>
@@ -84,8 +74,7 @@
 // :index="indexMethod"
 import { getInformationApi, getPeopleInfoApi } from "@/api/people"; //人员工作量列表
 import { mapActions, mapState } from "vuex";
-import Button from "@/components/MyButton";
-import Dialog from "@/components/Dialog";
+
 import dayjs from "@/utils/dayjs";
 export default {
   data() {
