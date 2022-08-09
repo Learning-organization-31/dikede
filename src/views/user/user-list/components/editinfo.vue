@@ -143,6 +143,7 @@ export default {
       };
       await editPeopleApi(this.peopleList, this.peopleInfo.userId);
       this.$parent.$parent.getPeopleList();
+      this.$message.success("修改成功");
       // this.$emit("save");
       this.onClose();
     },

@@ -77,7 +77,6 @@ export default {
     ...mapActions("people", ["setRoleList"]),
 
     getpeopleInfo() {
-      console.log(1);
       this.dialogTableVisible = true;
     },
     //调用vuex传过来的方法
@@ -89,7 +88,7 @@ export default {
       console.log(this.typeList);
     },
     async searchFn(value, status) {
-      this.setWorkCountList(value, status);
+      this.setWorkCountList({ userName: value }, { isRepair: status });
     },
     // 上一页
     lastPage() {

@@ -70,7 +70,8 @@
         <div class="info">支持扩展名：jpg、png，文件不得大于100kb</div>
         <el-form-item label="状态：" class="status">
           <el-radio-group v-model="peopleInfo.status">
-            <el-radio :label="true">是否启用</el-radio>
+            <el-checkbox v-model="checked">是否启用</el-checkbox>
+            <!-- <el-radio :label="true">是否启用</el-radio> -->
           </el-radio-group>
         </el-form-item>
       </el-form>
@@ -95,6 +96,7 @@ export default {
   },
   data() {
     return {
+      checked: false,
       //新建人员信息
       peopleInfo: {
         userName: "",
