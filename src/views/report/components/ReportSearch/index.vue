@@ -5,8 +5,8 @@
       <el-form-item :label="lastInpTitle + ': '">
         <el-select v-model="status" placeholder="请选择" :clearable="true">
           <el-option
-            :label="item.statusName"
-            :value="item.statusId"
+            :label="item.name"
+            :value="item.id"
             v-for="item in typeList"
             :key="item.statusId"
           />
@@ -20,7 +20,10 @@
           range-separator="~"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
+          :picker-options="pickerOptions"
+          :default-time="['00:00:00', '23:59:59']"
         >
+          >
         </el-date-picker>
       </el-form-item>
       <el-form-item>
@@ -39,12 +42,18 @@
 
 <script>
 import MyButton from '@/components/MyButton'
+import dayjs from 'dayjs'
 export default {
   name: 'MyOrderSearch',
   data() {
     return {
       status: '',
-      timeValue: null,
+      timeValue: [dayjs().startOf('month').$d, dayjs().$d],
+      pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() > Date.now()
+        },
+      },
 
       //搜索区域按钮样式
       searchButStyle: {
