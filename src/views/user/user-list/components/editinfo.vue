@@ -65,9 +65,11 @@
         </el-form-item>
         <div class="info">支持扩展名：jpg、png，文件不得大于100kb</div>
         <el-form-item label="状态：" class="status" prop="status">
-          <el-radio-group v-model="peopleInfo.status">
+          <!-- <el-radio-group v-model="peopleInfo.status">
             <el-radio :label="true">是否启用</el-radio>
-          </el-radio-group>
+            
+          </el-radio-group> -->
+          <el-checkbox v-model="checked">是否启用</el-checkbox>
         </el-form-item>
       </el-form>
     </Dialog>
@@ -91,6 +93,7 @@ export default {
   },
   data() {
     return {
+      checked: false,
       businessIsShow: false,
       imageUrl: "http://lkd2-java.itheima.net/image/avatar.png",
       formRules: {

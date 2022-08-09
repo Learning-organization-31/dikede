@@ -193,6 +193,9 @@ export default {
   border-bottom: none;
 }
 .detail {
+  ::v-deep.el-dialog {
+    width: 40%;
+  }
   .el-table {
     height: 200px;
   }
