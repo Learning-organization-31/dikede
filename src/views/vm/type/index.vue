@@ -30,6 +30,8 @@
         @exitVmServe="exitVmServe"
         @delVmServe="delVmServe"
       />
+
+      <!-- 页脚 -->
     </div>
   </div>
 </template>
@@ -39,6 +41,7 @@ import SearchBar from "@/components/SerchBar";
 import MyButton from "@/components/MyButton";
 import vmTable from "./components/vm-table.vue";
 import vmDialog from "./components/vm-dialog.vue";
+import FooterPage from "@/components/FooterPage";
 import { delvmTypeApi } from "@/api/vm/type";
 export default {
   name: "",
