@@ -32,6 +32,13 @@
       />
 
       <!-- 页脚 -->
+      <FooterPage
+        :taskList="VmTypeList"
+        :lastDisabled="lastDisabled"
+        :rightDisabled="rightDisabled"
+        @lastPage="lastPage"
+        @nextPage="nextPage"
+      />
     </div>
   </div>
 </template>
@@ -43,6 +50,7 @@ import vmTable from "./components/vm-table.vue";
 import vmDialog from "./components/vm-dialog.vue";
 import FooterPage from "@/components/FooterPage";
 import { delvmTypeApi } from "@/api/vm/type";
+import { mapState } from "vuex";
 export default {
   name: "",
   data() {
@@ -53,6 +61,7 @@ export default {
       },
       loading: false,
       businessIsShow: false,
+      pageIndex: 1,
     };
   },
 
@@ -60,14 +69,29 @@ export default {
     this.getVmTypeList();
   },
 
-  components: { SearchBar, vmTable, MyButton, vmDialog },
+  components: { SearchBar, vmTable, MyButton, vmDialog, FooterPage },
 
   methods: {
     // 获取售货机类型列表
-    async getVmTypeList(payload) {
+    async getVmTypeList() {
       this.loading = true;
-      await this.$store.dispatch("vm/getVmTypeList", payload);
+      await this.$store.dispatch("vm/getVmTypeList", {
+        pageSize: 10,
+        pageIndex: this.pageIndex,
+      });
       this.loading = false;
+    },
+
+    // 点击上一页
+    lastPage() {
+      this.pageIndex -= 1;
+      this.getVmTypeList();
+    },
+
+    // 点击下一页
+    nextPage() {
+      this.pageIndex += 1;
+      this.getVmTypeList();
     },
 
     // 点击新增
@@ -120,7 +144,15 @@ export default {
     },
   },
 
-  computed: {},
+  computed: {
+    ...mapState("vm", ["VmTypeList"]),
+    lastDisabled() {
+      return this.VmTypeList.pageIndex <= 1;
+    },
+    rightDisabled() {
+      return this.VmTypeList.pageIndex >= this.VmTypeList.totalPage;
+    },
+  },
 };
 </script>
 
