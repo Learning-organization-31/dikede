@@ -21,7 +21,6 @@
 
 <script>
 //引入搜索框和按钮组件
-import { getPeopleListApi } from "@/api/people";
 import Dialog from "@/components/Dialog";
 import SerchBar from "./components/detail.vue";
 import Button from "@/components/MyButton";
@@ -77,7 +76,6 @@ export default {
     ...mapActions("people", ["setRoleList"]),
 
     getpeopleInfo() {
-      console.log(1);
       this.dialogTableVisible = true;
     },
     //调用vuex传过来的方法
@@ -89,7 +87,7 @@ export default {
       console.log(this.typeList);
     },
     async searchFn(value, status) {
-      this.setWorkCountList(value, status);
+      this.setWorkCountList({ userName: value }, { isRepair: status });
     },
     // 上一页
     lastPage() {

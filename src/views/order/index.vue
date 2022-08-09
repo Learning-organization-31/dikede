@@ -39,9 +39,9 @@
         <el-table-column property="innerCode" label="设备编号">
         </el-table-column>
         <el-table-column property="status" label="订单状态"> </el-table-column>
-        <el-table-column property="createTime" label="订单日期">
+        <el-table-column property="createTime" label="订单日期" width="200">
         </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" width="100">
           <template slot-scope="scope">
             <span
               style="color: #4368e1; cursor: pointer; margin-right: 10px"

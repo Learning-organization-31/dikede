@@ -61,11 +61,21 @@ export default {
     //删除点位
     async removeNode(row) {
       try {
-        console.log(row.id);
+        await this.$confirm("此操作将永久删除该点位, 是否继续?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "error",
+        });
         await removeNodeFn(row.id);
         this.$message.success("删除成功");
       } catch (error) {
-        this.$message.error(error.response?.data || "服务器错误");
+        console.log(error);
+        if (error === "cancel") return;
+        if (error?.response?.data) {
+          this.$message.error(error.response.data);
+        } else {
+          this.$message.error("该点位不允许删除");
+        }
       }
     },
     //查看详情

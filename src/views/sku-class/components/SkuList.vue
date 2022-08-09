@@ -56,7 +56,7 @@ export default {
         this.$emit("init");
       } catch (error) {
         if (error?.response?.data) {
-          this.$message.error(error.respones.data);
+          this.$message.error(error.response.data);
         }
       }
     },

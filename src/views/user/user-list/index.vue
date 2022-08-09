@@ -1,12 +1,22 @@
 <template>
-  <div class="peopleManger">
+  <div>
     <SerchBar lastInpTitle="人员搜索" @search="onSearch" />
-    <Button class="addBtn" icon="el-icon-circle-plus-outline" @click="sureBtn"
-      >新建</Button
-    >
-    <!-- 列表 -->
-    <peopleTable />
-    <Dialog :isShow.sync="businessIsShow" @save="sureBtn"> </Dialog>
+
+    <div class="result">
+      <div class="btn-title">
+        <Button
+          class="addBtn"
+          icon="el-icon-circle-plus-outline"
+          :btnStyle="addBtnStyle"
+          @click="sureBtn"
+          >新建</Button
+        >
+      </div>
+      <!-- 列表 -->
+      <peopleTable />
+      <Dialog :isShow.sync="businessIsShow" @save="sureBtn"> </Dialog>
+    </div>
+
     <FooterPage
       :taskList="workList"
       :listIsShow="!workList.totalCount"
@@ -32,6 +42,10 @@ export default {
     return {
       businessIsShow: false,
       name: "",
+      //新建按钮样式
+      addBtnStyle: {
+        background: "linear-gradient(135deg,#ff9743,#ff5e20)",
+      },
     };
   },
   components: {
@@ -78,7 +92,7 @@ export default {
     },
     //头部搜索
     onSearch(value) {
-      this.setWorkPeople(value);
+      this.setWorkPeople({ userName: value });
     },
   },
 
@@ -110,7 +124,7 @@ export default {
     }
   }
   ::v-deep .el-table__header {
-    margin-top: 20px;
+    margin-top: 5px;
     margin-left: 20px;
   }
   ::v-deep .has-gutter {
@@ -139,5 +153,14 @@ export default {
   .delBtn {
     color: red;
   }
+}
+.result {
+  padding: 20px 15px 19px 17px;
+  background-color: #fff;
+}
+
+//新建按钮和工单按钮
+.btn-title {
+  display: flex;
 }
 </style>

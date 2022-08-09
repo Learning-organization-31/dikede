@@ -11,21 +11,17 @@
       <el-table-column
         prop="pageIndex"
         label="序号"
-        width="100"
+        width="80"
         type="index"
         :index="indexMethod"
         empty-text="暂无数据"
       >
       </el-table-column>
-      <el-table-column prop="userName" label="人员名称" width="250">
-      </el-table-column>
-      <el-table-column prop="regionName" label="归属区域" width="210">
-      </el-table-column>
-      <el-table-column prop="role.roleName" label="角色" width="250">
-      </el-table-column>
-      <el-table-column prop="mobile" label="联系电话" width="250">
-      </el-table-column>
-      <el-table-column prop="taskId" label="操作" width="160">
+      <el-table-column prop="userName" label="人员名称"> </el-table-column>
+      <el-table-column prop="regionName" label="归属区域"> </el-table-column>
+      <el-table-column prop="role.roleName" label="角色"> </el-table-column>
+      <el-table-column prop="mobile" label="联系电话"> </el-table-column>
+      <el-table-column prop="taskId" label="操作" width="200">
         <template v-slot="{ row }">
           <el-button @click="sureBtn(row.id)" type="text" size="small">
             修改
@@ -34,7 +30,7 @@
             @click="deleteRow(row.id)"
             type="text"
             size="small"
-            class="delBtn"
+            class="delBtn col-text"
           >
             删除
           </el-button>
@@ -79,13 +75,27 @@ export default {
     },
     async sureBtn(val) {
       await this.setpeopleInfoList(val);
-      console.log(this.peopleInfo);
       this.businessIsShow = true;
     },
     //删除任务
     async deleteRow(val) {
-      await delPeopleApi(val);
-      this.$parent.getPeopleList();
+      try {
+        await this.$confirm("此操作将永久删除该点位, 是否继续?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "error",
+        });
+        await delPeopleApi(val);
+        this.$parent.getPeopleList();
+        this.$message.success("删除成功");
+      } catch (error) {
+        if (error === "cancel") return;
+        if (error?.response?.data) {
+          this.$message.error(error.response.data);
+        } else {
+          this.$message.error("删除失败");
+        }
+      }
     },
   },
 };
@@ -96,5 +106,11 @@ export default {
 .el-table th.el-table__cell.is-leaf {
   border-bottom: none;
   padding-left: 20px;
+}
+.col-text {
+  color: red !important;
+  opacity: 0.8;
+  cursor: pointer;
+  margin-right: 7px;
 }
 </style>

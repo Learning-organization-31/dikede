@@ -105,12 +105,22 @@ export default {
     //删除区域
     async removeRegion(row) {
       try {
+        await this.$confirm("此操作将永久删除该区域, 是否继续?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "error",
+        });
         await removeRegion(row.id);
         this.$message.success("删除成功");
         this.SET_PAGE_INDEX();
         this.getRegionList();
       } catch (error) {
-        this.$message.error(error.response.data);
+        if (error === "cancel") return;
+        if (error?.response?.data) {
+          this.$message.error(error.response.data);
+        } else {
+          this.$message.error("服务器错误");
+        }
       }
     },
     //关闭弹窗
