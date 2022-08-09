@@ -64,7 +64,9 @@ export default {
     };
   },
 
-  created() {},
+  created() {
+    console.log(dayjs("2022-08-07").format("MM月DD日"));
+  },
 
   mounted() {
     //进入页面获取销售数据用于渲染条形图
@@ -95,7 +97,11 @@ export default {
           },
         },
         tooltip: {},
+        grid: {
+          left: 90,
+        },
         xAxis: {
+          boundaryGap: false,
           data: this.AmountCollect.xAxis,
         },
         yAxis: [
@@ -109,8 +115,32 @@ export default {
             type: "line",
             color: "red",
             smooth: true,
+            areaStyle: {
+              normal: {
+                color: {
+                  x: 0,
+                  y: 0,
+                  x2: 0,
+                  y2: 1,
+                  colorStops: [
+                    {
+                      offset: 0.1,
+                      color: "#ff5757", //0%处的颜色
+                    },
+                    {
+                      offset: 0.8,
+                      color: "#fdf6f6", //100%处的颜色
+                    },
+                  ],
+                  globlCoord: false,
+                },
+              },
+            },
           },
         ],
+        tooltip: {
+          trigger: "axis",
+        },
       });
     },
 
@@ -119,6 +149,19 @@ export default {
       // 基于准备好的dom，初始化echarts实例
       let myChart = this.$echarts.init(this.$refs.align);
       myChart.setOption({
+        tooltip: {
+          trigger: "axis",
+        },
+        title: {
+          text: "销售额分布",
+          left: "center",
+          textStyle: {
+            fontSize: 14,
+          },
+        },
+        grid: {
+          left: 90,
+        },
         xAxis: {
           type: "category",
           data: this.RegionCollect.xAxis,
@@ -131,8 +174,10 @@ export default {
             data: this.RegionCollect.series,
             type: "bar",
             showBackground: true,
-            backgroundStyle: {
-              color: "rgba(180, 180, 180, 0.2)",
+            color: "#91b0ff",
+            barWidth: "15",
+            itemStyle: {
+              barBorderRadius: [6, 6, 0, 0],
             },
           },
         ],
@@ -143,8 +188,22 @@ export default {
     async getAmountCollect(params) {
       const res = await getAmountCollect(params);
       res.series = res.series.map((item) => item / 100);
+      if (this.index === 1) {
+        res.xAxis = res.xAxis.map((item) => {
+          return this.isDay(dayjs(item).day());
+        });
+      } else if (this.index === 2) {
+        res.xAxis = res.xAxis.map((item) => {
+          return dayjs(item).format("MM月DD日");
+        });
+      } else if (this.index === 3) {
+        res.xAxis = res.xAxis.map((item) => {
+          return dayjs(item).format("YY年MM月");
+        });
+      }
       this.AmountCollect = res;
       this.drawLine();
+      console.log(this.AmountCollect);
     },
 
     //获取柱形图的数据
@@ -197,6 +256,26 @@ export default {
         start: dayjs(Date.now()).format("YYYY") + "-01-01",
         end: getCurrentNowNoTitle(),
       });
+    },
+
+    //用来返回星期几
+    isDay(num) {
+      switch (num) {
+        case 0:
+          return "星期天";
+        case 1:
+          return "星期一";
+        case 2:
+          return "星期二";
+        case 3:
+          return "星期三";
+        case 4:
+          return "星期四";
+        case 5:
+          return "星期五";
+        case 6:
+          return "星期六";
+      }
     },
   },
 
