@@ -84,3 +84,84 @@ export const addvmServeApi = (data) => {
     data,
   });
 };
+
+// 获取策略管理列表
+export const getPolicyListApi = (params) => {
+  return request({
+    url: "/api/vm-service/policy",
+    params,
+  });
+};
+
+// 应用策略
+export const updatePolicyApi = (data) => {
+  return request({
+    url: "/api/vm-service/vm/applyPolicy",
+    method: "PUT",
+    data,
+  });
+};
+
+// 查询售货机策略
+export const getVmPolicyApi = (innerCode) => {
+  return request({
+    url: "/api/vm-service/policy/vmPolicy/" + innerCode,
+  });
+};
+
+// 取消售货机策略
+export const cancelVmPolicyApi = (innerCode, policyId) => {
+  return request({
+    url: `/api/vm-service/vm/cancelPolicy/${innerCode}/${policyId}`,
+    method: "PUT",
+  });
+};
+
+// 修改售货机点位
+export const exitVmNodeApi = (id, nodeId) => {
+  return request({
+    url: `/api/vm-service/vm/${id}/${nodeId}`,
+    method: "PUT",
+  });
+};
+
+// 售货机类型详情
+export const getVmServeDeilApi = (typeId) => {
+  return request({
+    url: "/api/vm-service/vmType/" + typeId,
+  });
+};
+
+// 获取售货机货道详情
+export const getVmchannelListApi = (innerCode) => {
+  return request({
+    url: "/api/vm-service/channel/channelList/" + innerCode,
+  });
+};
+
+// 获取商圈下销量前10的商品(补货推荐)
+export const getbusinessTopListApi = (businessId) => {
+  return request({
+    url: "/api/vm-service/sku/businessTop10/" + businessId,
+  });
+};
+
+// 商品搜索
+export const getskuSearchApi = (params) => {
+  return request({
+    url: "/api/vm-service/sku/search",
+    params: {
+      pageSize: 10,
+      ...params,
+    },
+  });
+};
+
+// 货道配置
+export const channelConfigApi = (data) => {
+  return request({
+    url: "/api/vm-service/channel/channelConfig",
+    method: "PUT",
+    data,
+  });
+};

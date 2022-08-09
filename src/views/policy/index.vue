@@ -19,6 +19,7 @@
         :data="policyList.currentPageRecords"
         highlight-current-row
         style="width: 100%; margin-top: 20px"
+        fit
       >
         <el-table-column
           type="index"
@@ -27,13 +28,13 @@
           :index="indexMethod"
         >
         </el-table-column>
-        <el-table-column property="policyName" label="策略名称" width="500">
+        <el-table-column property="policyName" label="策略名称">
         </el-table-column>
-        <el-table-column property="discount" label="策略方案" width="500">
+        <el-table-column property="discount" label="策略方案">
         </el-table-column>
-        <el-table-column property="createTime" label="创建日期" width="230">
+        <el-table-column property="createTime" label="创建日期">
         </el-table-column>
-        <el-table-column label="操作" width="200">
+        <el-table-column label="操作">
           <template slot-scope="scope">
             <span
               style="color: #4368e1; cursor: pointer; margin-right: 10px"
@@ -42,7 +43,7 @@
             >
             <span
               style="color: #4368e1; cursor: pointer; margin-right: 10px"
-              @click="editDialogShow"
+              @click="editDialogShow(scope.row)"
               >修改</span
             >
             <span
@@ -111,31 +112,33 @@
     <!-- 新建弹窗 -->
     <AddDialog :isShowAdd.sync="isShowAdd"></AddDialog>
     <!-- 修改策略 -->
-    <AddDialog :isShowAdd.sync="isShowdeit"></AddDialog>
+    <DelDialog :isShowDeit.sync="isShowDeit" :itemInfo="itemInfo"></DelDialog>
   </div>
 </template>
 
 <script>
-import AddDialog from './components/AddDialog'
-import SearchBar from '@/components/SerchBar'
-import MyButton from '@/components/MyButton'
-import FooterPage from '@/components/FooterPage'
-import Dialog from '@/components/Dialog'
-import { mapActions, mapGetters } from 'vuex'
+import AddDialog from "./components/AddDialog";
+import DelDialog from "./components/DelDialog";
+import SearchBar from "@/components/SerchBar";
+import MyButton from "@/components/MyButton";
+import FooterPage from "@/components/FooterPage";
+import Dialog from "@/components/Dialog";
+import { mapActions, mapGetters } from "vuex";
 export default {
-  name: 'policy',
+  name: "policy",
   data() {
     return {
       addBtnStyle: {
-        background: 'linear-gradient(135deg,#ff9743,#ff5e20)',
+        background: "linear-gradient(135deg,#ff9743,#ff5e20)",
       },
       page: 1,
       pageNext: 1,
       dialogTableVisible: false,
-      id: '',
+      id: "",
       isShowAdd: false,
-      isShowdeit: false,
-    }
+      isShowDeit: false,
+      itemInfo: {},
+    };
   },
   components: {
     SearchBar,
@@ -143,101 +146,114 @@ export default {
     FooterPage,
     Dialog,
     AddDialog,
+    DelDialog,
   },
 
   created() {
-    this.setPolicyList([this.page, 10])
+    this.setPolicyList([this.page, 10]);
   },
 
   methods: {
-    ...mapActions('policy', [
-      'setPolicyList',
-      'setPolicyItemList',
-      'delPolicyItem',
+    ...mapActions("policy", [
+      "setPolicyList",
+      "setPolicyItemList",
+      "delPolicyItem",
     ]),
     indexMethod(index) {
-      if (this.policyList.pageIndex == 1) return index + 1
-      else return index + 1 + this.policyList.pageIndex * 10 - 10
+      if (this.policyList.pageIndex == 1) return index + 1;
+      else return index + 1 + this.policyList.pageIndex * 10 - 10;
     },
     //item
     indexMethodNext(index) {
-      if (this.policyItemList.pageIndex == 1) return index + 1
-      else return index + 1 + this.policyItemList.pageIndex * 10 - 10
+      if (this.policyItemList.pageIndex == 1) return index + 1;
+      else return index + 1 + this.policyItemList.pageIndex * 10 - 10;
     },
-    searchFn(taskCode) {},
+    searchFn(taskCode) {
+      try {
+        this.setPolicyList([this.page, 10, taskCode]);
+        this.$message.success("搜索成功");
+      } catch (error) {
+        this.$message.error("搜索失败");
+      }
+    },
     addDialogShow() {
-      this.isShowAdd = true
+      this.isShowAdd = true;
     },
-    editDialogShow() {
-      this.isShowdeit = true
+    editDialogShow(val) {
+      this.isShowDeit = true;
+      this.itemInfo = val;
     },
 
     getLastTaskService() {
-      this.page--
-      this.setPolicyList([this.page, 10])
+      this.page--;
+      this.setPolicyList([this.page, 10]);
     },
     getNextTaskService() {
-      this.page++
-      this.setPolicyList([this.page, 10])
+      this.page++;
+      this.setPolicyList([this.page, 10]);
     },
 
     //item
     getLastTaskServiceNext() {
-      this.pageNext--
-      this.setPolicyItemList([this.id, this.pageNext, 10])
+      this.pageNext--;
+      this.setPolicyItemList([this.id, this.pageNext, 10]);
     },
     getNextTaskServiceNext() {
-      this.pageNext++
-      this.setPolicyItemList([this.id, this.pageNext, 10])
+      this.pageNext++;
+      this.setPolicyItemList([this.id, this.pageNext, 10]);
     },
 
     itemDetails(val) {
-      this.id = val
-      this.dialogTableVisible = true
-      this.setPolicyItemList([val, this.pageNext, 10])
+      this.id = val;
+      this.dialogTableVisible = true;
+      this.setPolicyItemList([val, this.pageNext, 10]);
     },
     closeFn() {
-      this.dialogTableVisible = false
-      this.pageNext = 1
+      this.dialogTableVisible = false;
+      this.pageNext = 1;
     },
     async delClickFn(val) {
-      await this.delPolicyItem(val)
-      await this.setPolicyList([this.page, 10])
-      this.$message.success('删除成功')
+      try {
+        await this.delPolicyItem(val);
+        await this.setPolicyList([this.page, 10]);
+        this.$message.success("删除成功");
+      } catch (error) {
+        this.$message.error("删除失败");
+      }
     },
   },
 
   computed: {
-    ...mapGetters(['policyList', 'policyItemList']),
+    ...mapGetters(["policyList", "policyItemList"]),
 
     //控制列表数量显示隐藏
     listIsShow() {
-      return !this.policyList.currentPageRecords?.[0]
+      return !this.policyList.currentPageRecords?.[0];
     },
     //控制上一页的按钮是否禁用
     lastDisabled() {
-      return this.policyList.pageIndex <= 1
+      return this.policyList.pageIndex <= 1;
     },
     //控制下一页的按钮是否禁用
     rightDisabled() {
-      return this.policyList.pageIndex == this.policyList.totalPage
+      return this.policyList.pageIndex == this.policyList.totalPage;
     },
 
     // item
     //控制列表数量显示隐藏
     listIsShowNext() {
-      return !this.policyItemList.currentPageRecords?.[0]
+      return !this.policyItemList.currentPageRecords?.[0];
     },
     //控制上一页的按钮是否禁用
     lastDisabledNext() {
-      return this.policyItemList.pageIndex <= 1
+      return this.policyItemList.pageIndex <= 1;
     },
     //控制下一页的按钮是否禁用
     rightDisabledNext() {
-      return this.policyItemList.pageIndex == this.policyItemList.totalPage
+      return this.policyItemList.pageIndex == this.policyItemList.totalPage;
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
