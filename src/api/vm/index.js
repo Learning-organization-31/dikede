@@ -1,5 +1,11 @@
 import request from "@/utils/request";
-import dayjs from "dayjs";
+
+import {
+  getCurrentMonthFirst,
+  getCurrentNow,
+  getCurrentNowNoTitle,
+  getCurrentMonthOne,
+} from "@/utils/home";
 
 // 搜索售货机(售货机列表)
 export const getVmListApi = (params) => {
@@ -22,8 +28,8 @@ export const getorderCountApi = (innerCode) => {
   return request({
     url: "/api/order-service/report/orderCount",
     params: {
-      start: "2022-08-01 00:00:00",
-      end: dayjs().format("YYYY-MM-DD HH:mm:ss"),
+      start: getCurrentMonthFirst(),
+      end: getCurrentNow(),
       innerCode,
     },
   });
@@ -34,8 +40,8 @@ export const getorderAmountApi = (innerCode) => {
   return request({
     url: "/api/order-service/report/orderAmount",
     params: {
-      start: "2022-08-01 00:00:00",
-      end: dayjs().format("YYYY-MM-DD HH:mm:ss"),
+      start: getCurrentMonthFirst(),
+      end: getCurrentNow(),
       innerCode,
     },
   });
@@ -43,8 +49,8 @@ export const getorderAmountApi = (innerCode) => {
 
 // 获取售货机补货次数
 export const getsupplyCountApi = (innerCode) => {
-  const start = "2022-08-01";
-  const end = dayjs().format("YYYY-MM-DD");
+  const start = getCurrentMonthOne();
+  const end = getCurrentNowNoTitle();
   return request({
     url: `/api/task-service/task/supplyCount/${innerCode}/${start}/${end}`,
   });
@@ -52,8 +58,8 @@ export const getsupplyCountApi = (innerCode) => {
 
 // 获取售货机维修次数
 export const getrepairCountApi = (innerCode) => {
-  const start = "2022-08-01";
-  const end = dayjs().format("YYYY-MM-DD");
+  const start = getCurrentMonthOne();
+  const end = getCurrentNowNoTitle();
   return request({
     url: `/api/task-service/task/repairCount/${innerCode}/${start}/${end}`,
   });
@@ -61,8 +67,8 @@ export const getrepairCountApi = (innerCode) => {
 
 // 获取售货机商品销量
 export const getskuCollectApi = (innerCode) => {
-  const start = "2022-08-01";
-  const end = dayjs().format("YYYY-MM-DD");
+  const start = getCurrentMonthOne();
+  const end = getCurrentNowNoTitle();
   return request({
     url: `/api/order-service/report/skuCollect/${innerCode}/${start}/${end}`,
   });
