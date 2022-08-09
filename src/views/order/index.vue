@@ -73,24 +73,24 @@
 </template>
 
 <script>
-import dayjs from 'dayjs'
-import MyOrderSearch from './components/MyOrderSearch'
-import DetailOrder from './components/DetailOrder'
-import FooterPage from '@/components/FooterPage'
-import MyButton from '@/components/MyButton'
-import { mapGetters, mapActions } from 'vuex'
+import dayjs from "dayjs";
+import MyOrderSearch from "./components/MyOrderSearch";
+import DetailOrder from "./components/DetailOrder";
+import FooterPage from "@/components/FooterPage";
+import MyButton from "@/components/MyButton";
+import { mapGetters, mapActions } from "vuex";
 export default {
-  name: 'order',
+  name: "order",
   data() {
     return {
       page: 1,
       infoIsShow: false,
       itemInfo: {},
-      timeValue: '',
-      startDate: '',
-      endDate: '',
+      timeValue: "",
+      startDate: "",
+      endDate: "",
       loading: false,
-    }
+    };
   },
   components: {
     FooterPage,
@@ -100,79 +100,79 @@ export default {
   },
 
   created() {
-    this.getOrderList()
+    this.getOrderList();
   },
 
   methods: {
-    ...mapActions('order', ['setGetOrderList']),
+    ...mapActions("order", ["setGetOrderList"]),
     async searchFn(taskCode) {
-      this.loading = true
-      this.page = 1
+      this.loading = true;
+      this.page = 1;
       if (taskCode[0] === null && taskCode[1] === null) {
-        await this.setGetOrderList([this.page, 10])
+        await this.setGetOrderList([this.page, 10]);
       } else if (taskCode[0] !== null && taskCode[1] === null) {
-        await this.setGetOrderList([this.page, 10, taskCode[0]])
+        await this.setGetOrderList([this.page, 10, taskCode[0]]);
       } else if (taskCode[0] === null && taskCode[1] !== null) {
-        this.startDate = dayjs(taskCode[1][0]).format('YYYY-MM-DD')
-        this.endDate = dayjs(taskCode[1][2]).format('YYYY-MM-DD')
+        this.startDate = dayjs(taskCode[1][0]).format("YYYY-MM-DD");
+        this.endDate = dayjs(taskCode[1][2]).format("YYYY-MM-DD");
         await this.setGetOrderList([
           this.page,
           10,
           this.startDate,
           this.endDate,
-        ])
+        ]);
       } else if (taskCode[0] !== null && taskCode[1] !== null) {
-        this.startDate = dayjs(taskCode[1][0]).format('YYYY-MM-DD')
-        this.endDate = dayjs(taskCode[1][2]).format('YYYY-MM-DD')
+        this.startDate = dayjs(taskCode[1][0]).format("YYYY-MM-DD");
+        this.endDate = dayjs(taskCode[1][2]).format("YYYY-MM-DD");
         await this.setGetOrderList([
           this.page,
           10,
           taskCode[0],
           this.startDate,
           this.endDate,
-        ])
+        ]);
       }
-      this.loading = false
+      this.loading = false;
     },
     indexMethod(index) {
-      if (this.orderList.pageIndex == 1) return index + 1
-      else return index + 1 + this.orderList.pageIndex * 10 - 10
+      if (this.orderList.pageIndex == 1) return index + 1;
+      else return index + 1 + this.orderList.pageIndex * 10 - 10;
     },
     getLastTaskService() {
-      this.page--
-      this.setGetOrderList([this.page, 10])
+      this.page--;
+      this.setGetOrderList([this.page, 10]);
     },
     getNextTaskService() {
-      this.page++
-      this.setGetOrderList([this.page, 10])
+      this.page++;
+      this.setGetOrderList([this.page, 10]);
     },
     getOrderList() {
-      this.setGetOrderList([this.page, 10])
+      this.setGetOrderList([this.page, 10]);
     },
 
     itemOrder(val) {
-      this.itemInfo = val
-      this.infoIsShow = true
+      this.itemInfo = val;
+      this.infoIsShow = true;
     },
   },
 
   computed: {
-    ...mapGetters(['orderList']),
+    ...mapGetters(["orderList"]),
 
     //控制列表数量显示隐藏
     listIsShow() {
-      return !this.orderList.currentPageRecords?.[0]
+      return !this.orderList.currentPageRecords?.[0];
     },
     //控制上一页的按钮是否禁用
     lastDisabled() {
-      return this.orderList.pageIndex <= 1
+      return this.orderList.pageIndex <= 1;
     },
     //控制下一页的按钮是否禁用
     rightDisabled() {
-      return this.orderList.pageIndex == this.orderList.totalPage
+      return this.orderList.pageIndex == this.orderList.totalPage;
     },
   },
-}
+};
 </script>
 
 <style scoped lang="scss">
