@@ -137,6 +137,7 @@ export default {
         this.$refs.form.validate();
         await addPeopleApi(this.peopleInfo);
         this.$message.success("添加成功");
+        this.peopleInfo = "";
         this.$emit("save");
         this.onClose();
       } catch (err) {

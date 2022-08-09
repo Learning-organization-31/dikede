@@ -389,4 +389,12 @@ export default {
 ::v-deep .el-range-input {
   font-size: 12px;
 }
+::v-deep .el-input__suffix {
+  position: absolute;
+  top: 4px;
+  right: 15px;
+}
+::v-deep .el-input__inner {
+  height: 32px;
+}
 </style>

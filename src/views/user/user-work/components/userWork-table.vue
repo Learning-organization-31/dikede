@@ -46,34 +46,16 @@
           <span class="phone">联系电话：{{ peopleInfo.mobile }}</span>
           <p class="fuze">负责区域：{{ peopleInfo.regionName }}</p>
         </div>
-        <el-table border :data="dataTime">
-          <el-table-column width="95">
-            <template slot-scope="scope">
-              <span v-if="scope.$index === 0">本周</span>
-              <span v-if="scope.$index === 1">本月</span>
-              <span v-if="scope.$index === 2">本年</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="total" label="总工单数" width="160">
-          </el-table-column>
-          <el-table-column prop="cancelCount" label="拒绝工单" width="160">
-          </el-table-column>
-          <el-table-column prop="workCount" label="完成工单" width="160">
-          </el-table-column>
+        <!-- <el-table :data="detailsList" border>
+          <el-table-column width="80"></el-table-column>
           <el-table-column
-            prop="progressTotal"
-            label="进行中的工单"
-            width="160"
-          >
-          </el-table-column>
-          <!-- <el-table-column
             v-for="item in tableTitle"
             :key="item.name"
             :prop="item.name"
             :label="item.title"
-            width="160"
-          ></el-table-column> -->
-        </el-table>
+            width="100"
+          ></el-table-column>
+        </el-table> -->
       </el-dialog>
     </div>
   </div>
@@ -111,7 +93,6 @@ export default {
           name: "doingTotal",
         },
       ],
-      dataTimer: ["本周", "本月", "本年"],
       dataTime: [],
     };
   },
@@ -134,30 +115,14 @@ export default {
       const res = await getPeopleInfoApi(val);
       this.detailsList = res;
       const startTime = dayjs().startOf("day").format("YYYY-MM-DD HH:mm:ss");
+      console.log(startTime);
       const endTime = dayjs().endOf("date").format("YYYY-MM-DD HH:mm:ss");
-      const startMonth = dayjs().startOf("month").format("YYYY-MM-DD HH:mm:ss");
-      const endMonth = dayjs().endOf("month").format("YYYY-MM-DD HH:mm:ss");
-      const startYear = dayjs().startOf("year").format("YYYY-MM-DD HH:mm:ss");
-      const endYear = dayjs().endOf("year").format("YYYY-MM-DD HH:mm:ss");
-      const day = await getInformationApi({
-        userId: this.peopleInfo.userId,
-        start: startTime,
-        end: endTime,
-      });
-      this.dataTime.push(day);
-      const month = await getInformationApi({
-        userId: this.peopleInfo.userId,
-        start: startMonth,
-        end: endMonth,
-      });
-      this.dataTime.push(month);
-      const year = await getInformationApi({
-        userId: this.peopleInfo.userId,
-        start: startYear,
-        end: endYear,
-      });
-      this.dataTime.push(year);
-      console.log(this.dataTime);
+      // const data = await getInformationApi({
+      //   userId: this.peopleInfo.userId,
+      //   start: startTime,
+      //   end: endTime,
+      // });
+      // console.log(data);
       this.businessIsShow = true;
     },
     //通过element-ui来对应每个index
