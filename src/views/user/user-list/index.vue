@@ -78,7 +78,8 @@ export default {
     },
     //头部搜索
     onSearch(value) {
-      this.setWorkPeople(value);
+      console.log(value);
+      this.setWorkPeople({ userName: value });
     },
   },
 

@@ -4,46 +4,19 @@ import request from "@/utils/request";
  * @param {人员信息列表} params 
  * @returns promise
  */
-export function getPeopleListApi(userName,pageIndex,pageSize,roleId,isRepair) {
+export function getPeopleListApi(params) {
     return request({
       url: '/api/user-service/user/search',
       method: 'GET',
-      params:{
-        userName,
-        pageIndex,
-        pageSize, 
-        roleId,
-        isRepair
-      }
-    })
-  }
-  //点击下一页
-  export function setPeopleListApi(userName,pageIndex,pageSize,roleId,isRepair) {
-    return request({
-      url: '/api/user-service/user/search',
-      method: 'GET',
-      params:{
-        userName,
-        pageIndex,
-        pageSize, 
-        roleId,
-        isRepair
-      }
+      params
     })
   }
   //人员工作量列表
-  export function getWorkPeopleListApi(userName,isRepair,pageIndex,pageSize,roleId) {
+  export function getWorkPeopleListApi(params) {
     return request({
       url: '/api/user-service/user/searchUserWork',
       method: 'GET',
-      params:{
-        userName,
-        isRepair,
-        pageIndex,
-        pageSize,
-        roleId,
-        
-      }
+      params
     })
   } 
 
@@ -110,15 +83,11 @@ export function getPeopleListApi(userName,pageIndex,pageSize,roleId,isRepair) {
   }
 
   //获取人员排名详情
-  export function getInformationApi(userId,start,end) {
+  export function getInformationApi(params) {
     return request({
       url: '/api/task-service/task/userWork',
       method: 'GET',
-      params:{
-        userId,
-        start,
-        end
-      }
+      params
     })
   }
 
