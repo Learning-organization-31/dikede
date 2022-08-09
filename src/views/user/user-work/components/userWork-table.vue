@@ -31,94 +31,103 @@
       </el-table-column>
       <el-table-column prop="taskId" label="操作" width="160">
         <!-- slot-scope="scope" -->
-        <template>
-          <el-button @click="sureBtn" type="text" size="small">
+        <template v-slot="{ row }">
+          <el-button @click="sureBtn(row.userId)" type="text" size="small">
             查看详情
           </el-button>
         </template>
       </el-table-column>
-      <!-- <FormDialog :visible.sync="businessIsShow" /> -->
     </el-table>
     <div class="detail">
       <el-dialog title="人员详情" :visible.sync="businessIsShow">
         <div class="peopleName">
-          <span class="street">人员名称：运营街道</span>
-          <span class="yunying">角色：运营原</span>
-          <span class="phone">联系电话：1212121212</span>
-          <p class="fuze">负责区域：城北街道</p>
+          <span class="street">人员名称：{{ peopleInfo.userName }}</span>
+          <span class="yunying">角色：{{ peopleInfo.roleName }}</span>
+          <span class="phone">联系电话：{{ peopleInfo.mobile }}</span>
+          <p class="fuze">负责区域：{{ peopleInfo.regionName }}</p>
         </div>
-        <el-table :data="gridData" border>
+        <!-- <el-table :data="detailsList" border>
+          <el-table-column width="80"></el-table-column>
           <el-table-column
-            property="date"
-            label="总共单数"
-            width="150"
+            v-for="item in tableTitle"
+            :key="item.name"
+            :prop="item.name"
+            :label="item.title"
+            width="100"
           ></el-table-column>
-          <el-table-column
-            property="name"
-            label="拒绝工单"
-            width="200"
-          ></el-table-column>
-          <el-table-column
-            property="address"
-            label="完成工单"
-          ></el-table-column>
-          <el-table-column
-            property="address"
-            label="进行中的工单"
-          ></el-table-column>
-        </el-table>
+        </el-table> -->
       </el-dialog>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
+// type="index"
+// :index="indexMethod"
+import { getInformationApi, getPeopleInfoApi } from "@/api/people"; //人员工作量列表
+import { mapActions, mapState } from "vuex";
 import Button from "@/components/MyButton";
-// import Dialog from "./detail.vue";
 import Dialog from "@/components/Dialog";
-
+import dayjs from "@/utils/dayjs";
 export default {
-  // <Dialog :businessIsShow.sync="businessIsShow" @close="close"></Dialog>
-
-  // components: { Dialog, Button },
   data() {
     return {
       businessIsShow: false,
-      gridData: [
+      formLabelWidth: "120px",
+      detailsList: {},
+      tableTitle: [
         {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
+          title: "总工单数",
+          name: "total",
         },
         {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
+          title: "拒绝工单",
+          name: "cancelCount",
         },
         {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
+          title: "完成工单",
+          name: "workCount",
+        },
+        {
+          title: "进行中工单",
+          name: "doingTotal",
         },
       ],
-      formLabelWidth: "120px",
+      dataTime: [],
     };
   },
 
-  created() {},
+  created() {
+    // this.sureBtn();
+  },
   computed: {
+    ...mapState("people", ["peopleInfo"]),
     ...mapState("people", ["workCountList"]),
   },
   methods: {
+    ...mapActions("people", ["setpeopleInfoList"]),
+    ...mapActions("people", ["setWorkCountList"]),
+
+    async sureBtn(val) {
+      await this.setpeopleInfoList(val);
+      console.log(this.peopleInfo);
+      console.log(val);
+      const res = await getPeopleInfoApi(val);
+      this.detailsList = res;
+      const startTime = dayjs().startOf("day").format("YYYY-MM-DD HH:mm:ss");
+      console.log(startTime);
+      const endTime = dayjs().endOf("date").format("YYYY-MM-DD HH:mm:ss");
+      // const data = await getInformationApi({
+      //   userId: this.peopleInfo.userId,
+      //   start: startTime,
+      //   end: endTime,
+      // });
+      // console.log(data);
+      this.businessIsShow = true;
+    },
+    //通过element-ui来对应每个index
     indexMethod(index) {
       return index + 1;
-    },
-    // closeBtn() {
-    //   this.$emit("update:businessIsShow", false);
-    // },
-    sureBtn() {
-      this.businessIsShow = true;
     },
     // close() {
     //   this.businessIsShow = false;
@@ -136,10 +145,12 @@ export default {
   ::v-deep .has-gutter {
     .cell {
       color: rgb(102, 102, 102);
-      font-weight: 400;
       background-color: #f3f6fb;
       height: 42px;
       line-height: 42px;
+      margin-top: 20px;
+      font-size: 13px;
+      text-align: center;
     }
   }
   .cell {
@@ -156,21 +167,24 @@ export default {
 ::v-deep .el-table td.el-table__cell,
 .el-table th.el-table__cell.is-leaf {
   border-bottom: none;
-  padding-left: 20px;
 }
 .detail {
+  .el-table {
+    height: 200px;
+  }
   .peopleName {
     height: 86px;
-    padding: 19px 19px 0;
+    padding: 10px 19px 0;
+    margin-bottom: 20px;
     background: #f3f6fb;
     .street {
-      margin-right: 100px;
+      margin-right: 20px;
     }
     .yunying {
-      margin-right: 100px;
+      margin-right: 20px;
     }
     .phone {
-      margin-right: 100px;
+      margin-right: 20px;
     }
     .fuze {
       margin-top: 20px;
@@ -183,5 +197,12 @@ export default {
   .el-table__row {
     height: 40px;
   }
+}
+::v-deep .el-dialog__body {
+  min-height: 277px;
+}
+::v-deep .el-table thead {
+  font-size: 13px;
+  font-weight: normal;
 }
 </style>
