@@ -84,8 +84,13 @@ export default {
     },
     //删除任务
     async deleteRow(val) {
-      await delPeopleApi(val);
-      this.$parent.getPeopleList();
+      try {
+        await delPeopleApi(val);
+        this.$parent.getPeopleList();
+        this.$message.success("删除成功");
+      } catch (err) {
+        this.$message.error("删除失败");
+      }
     },
   },
 };
