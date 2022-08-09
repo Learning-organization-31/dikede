@@ -20,6 +20,7 @@
         fit
       >
         <el-table-column
+          v-loading="loading"
           type="index"
           label="序号"
           width="80"
@@ -88,6 +89,7 @@ export default {
       timeValue: '',
       startDate: '',
       endDate: '',
+      loading: false,
     }
   },
   components: {
@@ -103,20 +105,26 @@ export default {
 
   methods: {
     ...mapActions('order', ['setGetOrderList']),
-    searchFn(taskCode) {
+    async searchFn(taskCode) {
+      this.loading = true
       this.page = 1
       if (taskCode[0] === null && taskCode[1] === null) {
-        this.setGetOrderList([this.page, 10])
+        await this.setGetOrderList([this.page, 10])
       } else if (taskCode[0] !== null && taskCode[1] === null) {
-        this.setGetOrderList([this.page, 10, taskCode[0]])
+        await this.setGetOrderList([this.page, 10, taskCode[0]])
       } else if (taskCode[0] === null && taskCode[1] !== null) {
         this.startDate = dayjs(taskCode[1][0]).format('YYYY-MM-DD')
         this.endDate = dayjs(taskCode[1][2]).format('YYYY-MM-DD')
-        this.setGetOrderList([this.page, 10, this.startDate, this.endDate])
+        await this.setGetOrderList([
+          this.page,
+          10,
+          this.startDate,
+          this.endDate,
+        ])
       } else if (taskCode[0] !== null && taskCode[1] !== null) {
         this.startDate = dayjs(taskCode[1][0]).format('YYYY-MM-DD')
         this.endDate = dayjs(taskCode[1][2]).format('YYYY-MM-DD')
-        this.setGetOrderList([
+        await this.setGetOrderList([
           this.page,
           10,
           taskCode[0],
@@ -124,6 +132,7 @@ export default {
           this.endDate,
         ])
       }
+      this.loading = false
     },
     indexMethod(index) {
       if (this.orderList.pageIndex == 1) return index + 1

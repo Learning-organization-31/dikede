@@ -15,6 +15,7 @@
       </MyButton>
       <!-- 列表 -->
       <el-table
+        v-loading="loading"
         size="medium"
         :data="policyList.currentPageRecords"
         highlight-current-row
@@ -80,7 +81,11 @@
       <div class="dialogMain">
         <div style="margin: 0 10px; padding-top: 10px">策略方案:</div>
         <div style="margin-top: -4px; flex: 1">
-          <el-table :data="policyItemList.currentPageRecords" fit>
+          <el-table
+            :data="policyItemList.currentPageRecords"
+            fit
+            v-loading="isloading"
+          >
             <el-table-column
               type="index"
               label="序号"
@@ -138,6 +143,8 @@ export default {
       isShowAdd: false,
       isShowDeit: false,
       itemInfo: {},
+      loading: false,
+      isloading: false,
     }
   },
   components: {
@@ -149,8 +156,10 @@ export default {
     DelDialog,
   },
 
-  created() {
-    this.setPolicyList([this.page, 10])
+  async created() {
+    this.loading = true
+    await this.setPolicyList([this.page, 10])
+    this.loading = false
   },
 
   methods: {
@@ -194,13 +203,17 @@ export default {
     },
 
     //item
-    getLastTaskServiceNext() {
+    async getLastTaskServiceNext() {
+      this.isloading = true
       this.pageNext--
-      this.setPolicyItemList([this.id, this.pageNext, 10])
+      await this.setPolicyItemList([this.id, this.pageNext, 10])
+      this.isloading = false
     },
-    getNextTaskServiceNext() {
+    async getNextTaskServiceNext() {
+      this.isloading = true
       this.pageNext++
-      this.setPolicyItemList([this.id, this.pageNext, 10])
+      await this.setPolicyItemList([this.id, this.pageNext, 10])
+      this.isloading = false
     },
 
     itemDetails(val) {

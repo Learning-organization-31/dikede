@@ -38,7 +38,6 @@ export default {
           ? ele.addr.split('-')[3]
           : ele.addr.split('-')[1]
       })
-      console.log(res)
       context.commit('setGetOrderList', res)
     },
   },

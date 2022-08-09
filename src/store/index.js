@@ -14,6 +14,7 @@ import node from './modules/node'
 import partner from './modules/partner'
 import operation from './modules/operation'
 import order from './modules/order'
+import report from './modules/report'
 
 Vue.use(Vuex)
 
@@ -31,6 +32,7 @@ const store = new Vuex.Store({
     region,
     node,
     order,
+    report,
   },
   getters,
   plugins: [
