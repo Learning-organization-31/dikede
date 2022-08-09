@@ -106,3 +106,23 @@ export const getRegionCollect = (params) => {
   });
 };
 
+// 合作商点位汇总统计
+export const getNodeCollectApi = () => {
+  return request({
+    url: "/api/vm-service/node/nodeCollect",
+  });
+};
+
+// 获取点位总数
+export const getNodeCountApi = () => {
+  return request({
+    url: "/api/vm-service/node/count",
+  });
+};
+
+// 获取合作商总数
+export const getPartnerCountApi = () => {
+  return request({
+    url: "/api/user-service/partner/count",
+  });
+};

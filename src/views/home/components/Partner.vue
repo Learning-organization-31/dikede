@@ -11,9 +11,9 @@
       <el-empty description="暂无内容" :image="image"></el-empty>
     </div>
     <div class="dianwei">
-      <div class="count">25</div>
+      <div class="count">{{ NodeCount }}</div>
       <div class="name">点位数</div>
-      <div class="count">5</div>
+      <div class="count">{{ PartnerCount }}</div>
       <div class="name">合作商数</div>
     </div>
   </div>
@@ -21,61 +21,50 @@
 
 <script>
 import image from "@/assets/imgs/no.png";
+import {
+  getNodeCollectApi,
+  getNodeCountApi,
+  getPartnerCountApi,
+} from "@/api/home";
 export default {
   name: "Partner",
   data() {
     return {
       image,
+      NodeCollect: [],
+      NodeCount: "",
+      PartnerCount: "",
     };
   },
 
-  created() {},
-
-  mounted() {
-    // this.drawLine();
+  async created() {
+    this.NodeCollect = await getNodeCollectApi();
+    this.drawLine();
+    this.NodeCount = await getNodeCountApi();
+    this.PartnerCount = await getPartnerCountApi();
   },
 
   methods: {
-    // drawLine() {
-    //   // 基于准备好的dom，初始化echarts实例
-    //   let myChart = this.$echarts.init(this.$refs.basic);
-    //   myChart.setOption({
-    //     legend: {
-    //       top: "bottom",
-    //     },
-    //     toolbox: {
-    //       show: true,
-    //       feature: {
-    //         mark: { show: true },
-    //         dataView: { show: true, readOnly: false },
-    //         restore: { show: true },
-    //         saveAsImage: { show: true },
-    //       },
-    //     },
-    //     series: [
-    //       {
-    //         name: "Nightingale Chart",
-    //         type: "pie",
-    //         radius: [50, 250],
-    //         center: ["50%", "50%"],
-    //         roseType: "area",
-    //         itemStyle: {
-    //           borderRadius: 8,
-    //         },
-    //         data: [
-    //           { value: 40, name: "rose 1" },
-    //           { value: 38, name: "rose 2" },
-    //           { value: 32, name: "rose 3" },
-    //           { value: 30, name: "rose 4" },
-    //           { value: 28, name: "rose 5" },
-    //           { value: 26, name: "rose 6" },
-    //           { value: 22, name: "rose 7" },
-    //           { value: 18, name: "rose 8" },
-    //         ],
-    //       },
-    //     ],
-    //   });
-    // },
+    drawLine() {
+      // 基于准备好的dom，初始化echarts实例
+      let myChart = this.$echarts.init(this.$refs.basic);
+      myChart.setOption({
+        tooltip: {
+          trigger: "item",
+          formatter: "{a} <br/>{b}: {c} ({d}%)",
+        },
+        series: [
+          {
+            name: "合作商点照射Top5",
+            type: "pie",
+            radius: [20, 100],
+            center: ["30%", "50%"],
+            roseType: "radius",
+            data: this.NodeCollect,
+          },
+        ],
+      });
+    },
   },
 
   computed: {},
