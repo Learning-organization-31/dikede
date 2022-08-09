@@ -77,9 +77,15 @@
           </div>
         </div>
         <div class="selectTime">
-          <div class="item is-checked">周</div>
-          <div class="item">月</div>
-          <div class="item">年</div>
+          <div class="item" :class="{ ischeckoud: index === 1 }" @click="week">
+            周
+          </div>
+          <div class="item" :class="{ ischeckoud: index === 2 }" @click="mon">
+            月
+          </div>
+          <div class="item" :class="{ ischeckoud: index === 3 }" @click="yer">
+            年
+          </div>
         </div>
         <div class="card-img">
           <img src="../../../assets/imgs/no.png" />
@@ -100,8 +106,20 @@
             </el-select>
           </div>
           <div class="role-list">
-            <div class="item">运营人员</div>
-            <div class="item">运维人员</div>
+            <div
+              class="item"
+              :class="{ ischeckoud: checkedout === 1 }"
+              @click="isCheckedone"
+            >
+              运营人员
+            </div>
+            <div
+              class="item"
+              :class="{ ischeckoud: checkedout === 2 }"
+              @click="isCheckedtwo"
+            >
+              运维人员
+            </div>
           </div>
         </div>
         <div class="body-img">
@@ -123,6 +141,8 @@ export default {
       pickerOptions: {},
       value1: [new Date(), new Date()],
       dataTime: {},
+      index: 1,
+      checkedout: 1,
       operation: {},
       pickerOptions: {
         disabledDate(time) {
@@ -137,6 +157,26 @@ export default {
   },
 
   methods: {
+    week() {
+      if (this.index === 1) return;
+      this.index = 1;
+    },
+    mon() {
+      if (this.index === 2) return;
+      this.index = 2;
+    },
+    yer() {
+      if (this.index === 3) return;
+      this.index = 3;
+    },
+    isCheckedone() {
+      if (this.checkedout === 1) return;
+      this.checkedout = 1;
+    },
+    isCheckedtwo() {
+      if (this.checkedout === 2) return;
+      this.checkedout = 2;
+    },
     async getPeopleCount() {
       const res = await getCountApi();
       console.log(res);
@@ -396,5 +436,13 @@ export default {
 }
 ::v-deep .el-input__inner {
   height: 32px;
+}
+.ischeckoud {
+  background: #fff;
+  -webkit-box-shadow: 0 0 4px 0 rgb(0 0 0 / 11%);
+  box-shadow: 0 0 4px 0 rgb(0 0 0 / 11%);
+  border-radius: 7px;
+  font-weight: 600;
+  color: #333;
 }
 </style>
