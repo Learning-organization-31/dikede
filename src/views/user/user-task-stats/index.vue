@@ -89,7 +89,7 @@
         <div class="header">
           <div class="title">人效排名（月度）</div>
           <div class="select">
-            <el-select v-model="areaList.name" placeholder="请选择">
+            <el-select v-model="areaList.name" placeholder="全部">
               <el-option
                 v-for="item in areaList.currentPageRecords"
                 :key="item.id"
@@ -306,7 +306,7 @@ export default {
         height: 32px;
         position: absolute;
         top: 239px;
-        right: 600px;
+        right: 780px;
         ::v-deep .el-range__icon {
           line-height: 24px;
         }
@@ -321,7 +321,7 @@ export default {
       background: rgba(233, 243, 255, 0.37);
       border-radius: 10px;
       position: absolute;
-      right: 450px;
+      right: 600px;
       top: 239px;
       .item {
         width: 37px;
