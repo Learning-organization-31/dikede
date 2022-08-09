@@ -6,25 +6,25 @@
         <div class="people-right-car">
           <div class="status">
             <div class="item">
-              <div class="num">0</div>
+              <div class="num">{{ dataTime.total }}</div>
               <div class="text">工单总数（个）</div>
             </div>
           </div>
           <div class="status">
             <div class="item">
-              <div class="num">0</div>
+              <div class="num">{{ dataTime.completedTotal }}</div>
               <div class="text">完成工单（个）</div>
             </div>
           </div>
           <div class="status">
             <div class="item">
-              <div class="num">0</div>
+              <div class="num">{{ dataTime.cancelTotal }}</div>
               <div class="text">拒绝工单（个）</div>
             </div>
           </div>
           <div class="status">
             <div class="item">
-              <div class="num">0</div>
+              <div class="num">{{ dataTime.workerCount }}</div>
               <div class="text">运营人员数（个）</div>
             </div>
           </div>
@@ -35,25 +35,25 @@
         <div class="people-right-cilun">
           <div class="status">
             <div class="item">
-              <div class="num">2</div>
+              <div class="num">{{ operation.total }}</div>
               <div class="text">工单总数（个）</div>
             </div>
           </div>
           <div class="status">
             <div class="item">
-              <div class="num">0</div>
+              <div class="num">{{ operation.completedTotal }}</div>
               <div class="text">完成工单（个）</div>
             </div>
           </div>
           <div class="status">
             <div class="item">
-              <div class="num">0</div>
+              <div class="num">{{ operation.cancelTotal }}</div>
               <div class="text">拒绝工单（个）</div>
             </div>
           </div>
           <div class="status">
             <div class="item">
-              <div class="num">12</div>
+              <div class="num">{{ operation.workerCount }}</div>
               <div class="text">运维人员数（个）</div>
             </div>
           </div>
@@ -66,19 +66,18 @@
           <div class="left-status">工单状态</div>
           <div class="block">
             <el-date-picker
-              v-model="value2"
-              type="datetimerange"
-              :picker-options="pickerOptions"
-              range-separator="至"
+              v-model="value1"
+              type="daterange"
+              range-separator="~"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
-              align="right"
+              :picker-options="pickerOptions"
             >
             </el-date-picker>
           </div>
         </div>
         <div class="selectTime">
-          <div class="item">周</div>
+          <div class="item is-checked">周</div>
           <div class="item">月</div>
           <div class="item">年</div>
         </div>
@@ -90,12 +89,12 @@
         <div class="header">
           <div class="title">人效排名（月度）</div>
           <div class="select">
-            <el-select v-model="value" placeholder="请选择">
+            <el-select v-model="areaList.name" placeholder="请选择">
               <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
+                v-for="item in areaList.currentPageRecords"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
               >
               </el-option>
             </el-select>
@@ -114,50 +113,46 @@
 </template>
 
 <script>
-import { getPeopleCountApi } from "@/api/people";
+import { getCountApi } from "@/api/people";
+import { mapActions, mapState } from "vuex";
 export default {
-  name: "",
+  name: "task",
   data() {
     return {
-      value1: "",
-      value2: "",
+      // times: ["周", "月", "年"],
       pickerOptions: {},
-      options: [
-        {
-          value: "选项1",
-          label: "黄金糕",
+      value1: [new Date(), new Date()],
+      dataTime: {},
+      operation: {},
+      pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() > Date.now();
         },
-        {
-          value: "选项2",
-          label: "双皮奶",
-        },
-        {
-          value: "选项3",
-          label: "蚵仔煎",
-        },
-        {
-          value: "选项4",
-          label: "龙须面",
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭",
-        },
-      ],
-      value: "",
+      },
     };
   },
 
-  created() {},
+  created() {
+    this.getPeopleCount();
+  },
 
   methods: {
     async getPeopleCount() {
-      const res = await getPeopleCountApi();
+      const res = await getCountApi();
       console.log(res);
+    },
+    ...mapActions("people", ["setAreaList"]),
+    async getPeopleCount(payload) {
+      await this.setAreaList(payload);
+      const res = await getCountApi();
+      this.dataTime = res[0];
+      this.operation = res[1];
     },
   },
 
-  computed: {},
+  computed: {
+    ...mapState("people", ["areaList"]),
+  },
 };
 </script>
 
@@ -220,6 +215,13 @@ export default {
         }
       }
     }
+  }
+  .item is-checked {
+    background: #fff;
+    box-shadow: 0 0 4px 0 rgb(0 0 0 / 11%);
+    border-radius: 7px;
+    font-weight: 600;
+    color: #333;
   }
   .people-right {
     position: absolute;
@@ -383,5 +385,8 @@ export default {
       }
     }
   }
+}
+::v-deep .el-range-input {
+  font-size: 12px;
 }
 </style>

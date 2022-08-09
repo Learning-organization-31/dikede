@@ -74,7 +74,8 @@ export default {
     },
     // 详细地址
     vmAddr(a, b, value) {
-      return value.split("-")[3];
+      // return value.split("-")[3] ? value.split("-")[3] : value.split("-")[1];
+      return value.split("-")[3] ? value.split("-")[3] : value;
     },
     // 查看详情
     checkDetails(index) {

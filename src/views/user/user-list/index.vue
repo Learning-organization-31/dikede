@@ -1,17 +1,20 @@
 <template>
   <div class="peopleManger">
-    <SerchBar lastInpTitle="人员搜索" />
+    <SerchBar lastInpTitle="人员搜索" @search="onSearch" />
     <Button class="addBtn" icon="el-icon-circle-plus-outline" @click="sureBtn"
       >新建</Button
     >
     <!-- 列表 -->
     <peopleTable />
-    <Dialog
-      :businessIsShow.sync="businessIsShow"
-      @sureBtn="close"
-      @cancelBtn="close"
-      @close="close"
-    />
+    <Dialog :isShow.sync="businessIsShow" @save="sureBtn"> </Dialog>
+    <FooterPage
+      :taskList="workList"
+      :listIsShow="!workList.totalCount"
+      @lastPage="lastPage"
+      @nextPage="nextPage"
+      :lastDisabled="lastDisabled"
+      :rightDisabled="rightDisabled"
+    ></FooterPage>
   </div>
 </template>
 
@@ -20,14 +23,15 @@
 import peopleTable from "./components/people-table.vue";
 import SerchBar from "@/components/SerchBar";
 import Button from "@/components/MyButton";
-import Dialog from "@/components/Dialog";
-import { mapActions } from "vuex";
-// import FooterPage from "@/components/FooterPage";
+import Dialog from "./components/dialogy-table.vue";
+import { mapActions, mapState } from "vuex";
+import FooterPage from "@/components/FooterPage";
 export default {
   name: "PeopleManger",
   data() {
     return {
       businessIsShow: false,
+      name: "",
     };
   },
   components: {
@@ -35,6 +39,7 @@ export default {
     SerchBar,
     Dialog,
     peopleTable,
+    FooterPage,
   },
   created() {
     this.getPeopleList();
@@ -42,12 +47,14 @@ export default {
 
   methods: {
     ...mapActions("people", ["setWorkPeople"]),
-    getTaskInfo() {},
-    deleteRow(id) {
-      // rows.splice(index, 1);
-    },
+    ...mapActions("people", ["setRoleList"]),
+    ...mapActions("people", ["setWorkCountList"]),
+    ...mapActions("people", ["setAreaList"]),
     async getPeopleList(payload) {
       await this.setWorkPeople(payload);
+      await this.setRoleList(payload);
+      await this.setWorkCountList(payload);
+      await this.setAreaList(payload);
     },
 
     sureBtn() {
@@ -56,9 +63,40 @@ export default {
     close() {
       this.businessIsShow = false;
     },
+    // 上一页
+    lastPage() {
+      this.setWorkPeople({
+        pageIndex: this.workList.pageIndex - 1,
+      });
+    },
+
+    // 下一页
+    nextPage() {
+      this.setWorkPeople({
+        pageIndex: this.workList.pageIndex - 0 + 1,
+      });
+    },
+    //头部搜索
+    onSearch(value) {
+      this.setWorkPeople(value);
+    },
   },
 
-  computed: {},
+  computed: {
+    ...mapState("people", ["workList"]),
+    ...mapState("people", ["roleList"]),
+    ...mapState("people", ["workCountList"]),
+    ...mapState("people", ["areaList"]),
+    ...mapState("people", ["peopleInfo"]),
+    // 假如当前是第一页，点击上一页，按钮会变成不可点击
+    lastDisabled() {
+      return this.workList.pageIndex <= "1";
+    },
+    // 假如当前是最后一页，点击下一页，按钮会变成不可点击，且还是保留在最后一页
+    rightDisabled() {
+      return this.workList.pageIndex >= this.workList.totalPage;
+    },
+  },
 };
 </script>
 
