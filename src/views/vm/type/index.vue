@@ -103,7 +103,7 @@ export default {
     // 点击搜索
     onsearch(value) {
       if (this.loading) return; // 防抖
-      this.getVmTypeList({ name: value });
+      this.getVmTypeList({ name: value, pageIndex: 1 });
     },
 
     // 表单点击修改

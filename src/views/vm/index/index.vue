@@ -152,7 +152,7 @@ export default {
 
     // 点击搜索
     onSearch(val) {
-      this.getMyVmList({ innerCode: val });
+      this.getMyVmList({ innerCode: val, pageIndex: 1 });
     },
 
     // 点击上一页
