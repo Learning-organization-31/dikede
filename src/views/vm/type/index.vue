@@ -73,11 +73,12 @@ export default {
 
   methods: {
     // 获取售货机类型列表
-    async getVmTypeList() {
+    async getVmTypeList(data) {
       this.loading = true;
       await this.$store.dispatch("vm/getVmTypeList", {
         pageSize: 10,
         pageIndex: this.pageIndex,
+        ...data,
       });
       this.loading = false;
     },
