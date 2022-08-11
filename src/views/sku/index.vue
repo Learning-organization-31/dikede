@@ -178,6 +178,7 @@ export default {
     //搜索获取新结果
     searchFn(name) {
       this.SET_PARAMS_SKU_NAME(name);
+      this.SET_PAGE_INDEX();
       this.getSkuListFn(this.params);
     },
 

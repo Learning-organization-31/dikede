@@ -70,6 +70,7 @@ export default {
     //搜索区域
     searchFn(value) {
       this.SET_REGION_LIST_NAME(value.trim());
+      this.SET_PAGE_INDEX();
       this.getRegionList(this.regionSearch);
     },
     //新增按钮显示弹窗

@@ -95,6 +95,7 @@ export default {
     //搜索
     searchFn(name) {
       this.params.className = name;
+      this.params.pageIndex = 1;
       this.skuGetSearch();
     },
 
