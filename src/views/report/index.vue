@@ -158,8 +158,8 @@ export default {
     async searchFn(val) {
       if (
         val?.[0] !== this.searchVal?.[0] ||
-        val?.[1][0] !== this.searchVal?.[1][0] ||
-        val?.[1][1] !== this.searchVal?.[1][1]
+        val?.[1]?.[0] !== this.searchVal?.[1]?.[0] ||
+        val?.[1]?.[1] !== this.searchVal?.[1]?.[1]
       )
         this.page = 1
       if (!val) {
