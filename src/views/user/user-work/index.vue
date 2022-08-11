@@ -87,7 +87,10 @@ export default {
       console.log(this.typeList);
     },
     async searchFn(value, status) {
-      this.setWorkCountList({ userName: value }, { isRepair: status });
+      this.setWorkCountList({
+        userName: value,
+        isRepair: status == true && status == false,
+      });
     },
     // 上一页
     lastPage() {
