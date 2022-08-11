@@ -137,9 +137,9 @@ export default {
     ]),
 
     // 获取售货机列表
-    async getMyVmList() {
+    async getMyVmList(data) {
       this.loading = true;
-      await this.getVmList({ pageIndex: this.pageIndex });
+      await this.getVmList({ pageIndex: this.pageIndex, ...data });
       this.loading = false;
     },
 

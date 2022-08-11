@@ -156,8 +156,17 @@ export default {
     ...mapActions('report', ['setPartnersList', 'setPartnerNameList']),
 
     async searchFn(val) {
+      if (
+        val?.[0] !== this.searchVal?.[0] ||
+        val?.[1][0] !== this.searchVal?.[1][0] ||
+        val?.[1][1] !== this.searchVal?.[1][1]
+      )
+        this.page = 1
+      if (!val) {
+        val = [null, [dayjs().startOf('month').$d, dayjs().$d]]
+      }
+
       this.loading = true
-      if (val[0] !== this.searchVal[0]) this.page = 1
       this.searchVal = val
       this.oneStartTime = val[1][0]
       this.oneEndTime = val[1][1]

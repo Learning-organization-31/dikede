@@ -37,9 +37,9 @@
 </template>
 
 <script>
-import MyButton from '@/components/MyButton'
+import MyButton from "@/components/MyButton";
 export default {
-  name: 'MyOrderSearch',
+  name: "MyOrderSearch",
   data() {
     return {
       taskCode: null,
@@ -47,9 +47,9 @@ export default {
 
       //搜索区域按钮样式
       searchButStyle: {
-        background: '#5f84ff',
+        background: "#5f84ff",
       },
-    }
+    };
   },
 
   props: {
@@ -69,7 +69,7 @@ export default {
   methods: {
     //搜索按钮获取数据
     searchBtnFn() {
-      this.$emit('search', [this.taskCode, this.timeValue])
+      this.$emit("search", [this.taskCode, this.timeValue]);
     },
   },
 
@@ -78,7 +78,7 @@ export default {
   components: {
     MyButton,
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
