@@ -14,6 +14,7 @@
       </el-form-item>
       <el-form-item :label="dateTitle + ': '" v-if="dateInput">
         <el-date-picker
+          :clearable="false"
           style="width: 410px"
           v-model.number="timeValue"
           type="daterange"
