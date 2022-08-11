@@ -99,6 +99,7 @@ export default {
     //搜索点位
     searchFn(name, regionId) {
       this.SET_NAME_AND_REGIONID([name, regionId]);
+      this.SET_PAGE_INDEX();
       this.getNodeList(this.nodeSearchCondition);
     },
 
